@@ -29,7 +29,7 @@ public class Chess {
 				System.out.println("Illegal move, try again");
 				continue;
 			}
-			
+			//Check for checkmate
 			Board.render();
 			
 			if (Board.state == 0) {
