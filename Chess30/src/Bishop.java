@@ -1,8 +1,8 @@
 
 public class Bishop extends Piece{
 
-	public Bishop(int i) {
-		super(i);
+	public Bishop(int i, int x, int y) {
+		super(i, x, y);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -15,7 +15,8 @@ public class Bishop extends Piece{
 	@Override
 	public void moveTo(int end_i, int end_j, Piece promotion) throws Exception {
 		// TODO Auto-generated method stub
-		
+		boolean legal = false;
+	
 	}
 
 	//ALL IN MOVETO
