@@ -1,4 +1,4 @@
-
+package chess;
 public class Bishop extends Piece{
 
 	public Bishop(int i, int x, int y) {

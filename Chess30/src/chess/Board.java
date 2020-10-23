@@ -1,7 +1,18 @@
+package chess;
 public class Board {
 	static Piece[][] layout = new Piece[8][8];
 	static String[][] stringBoard = new String[8][8];
 	static int state = -1;
+
+	static void updatePos() {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) { 
+				if(layout[i][j] != null) {
+					layout[i][j].updatePos(j, i);
+				}
+			}
+		}
+	}
 	
 	static void render() {
 		for (int i = 0; i < 8; i++) { // i = 1 - 8
@@ -39,6 +50,13 @@ public class Board {
 			}
 			System.out.println();
 		}
+	}
+	
+	void checkIfcheck(int side) {
+		
+	}
+	void checkIfcheckmate(int side) {
+		
 	}
 			
 }

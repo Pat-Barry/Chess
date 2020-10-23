@@ -1,11 +1,10 @@
+package chess;
 
 public class Pawn extends Piece {
 
 	int promotion_bar;
 	int delta;
 	boolean hasMoved = false;
-	
-	
 	
 	public Pawn(int s, int x, int y) {
 		super(s, x, y);
@@ -30,10 +29,17 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public void moveTo(int end_i, int end_j, Piece promotion) throws Exception {
+	public void moveTo(int end_i, int end_j, Piece promotion) throws Exception { // i = y, j = x
 		// TODO Auto-generated method stub
 		this.hasMoved = true;
 		
+		if(end_i == this.pos.y + 1) {
+			if(end_j == this.pos.x) {
+				if(Board.layout[end_j][end_i] != null) {
+					throw new Exception();
+				}
+			}
+		}
 		
 		
 		

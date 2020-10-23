@@ -1,15 +1,16 @@
+package chess;
 import java.util.Scanner;
 
 public class Chess {
 	
 	static int turn = 0;
 	static boolean drawRequest = false;
+	static int i;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		Board.render();
 		
-		
-		for (int i = 0; true; i++) {
+		for (i = 0; true; i++) {
 			try {
 				askForInput();
 			}
@@ -29,9 +30,9 @@ public class Chess {
 				System.out.println("Illegal move, try again");
 				continue;
 			}
+			Board.updatePos();
 			//Check for checkmate
 			Board.render();
-			
 			if (Board.state == 0) {
 				System.out.println("White wins");
 				break;

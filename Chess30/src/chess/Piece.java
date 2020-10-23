@@ -1,4 +1,4 @@
-
+package chess;
 public abstract class Piece {
 	
 	int side;
