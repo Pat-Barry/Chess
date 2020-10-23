@@ -14,6 +14,13 @@ public class Board {
 		}
 	}
 	
+	static Piece getPiece(Position p) {
+		return layout[p.y][p.x];
+	}
+	static Piece getPieceFromDelta(Position p, int x, int y) {
+		return layout[p.y + y][p.x + x];
+	}
+	
 	static void render() {
 		for (int i = 0; i < 8; i++) { // i = 1 - 8
 			for (int j = 0; j < 8; j++) { // j = a -h
