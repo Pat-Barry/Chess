@@ -15,6 +15,6 @@ public abstract class Piece {
 
 	public abstract String getString();
 
-	public abstract void moveTo(int end_i, int end_j, Piece promotion) throws Exception;
+	public abstract void moveTo(Position newpos, Piece promotion) throws Exception;
 	
 }

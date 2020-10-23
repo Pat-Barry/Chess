@@ -13,7 +13,7 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public void moveTo(int end_i, int end_j, Piece promotion) throws Exception {
+	public void moveTo(Position newpos, Piece promotion) throws Exception {
 		// TODO Auto-generated method stub
 		boolean legal = false;
 	

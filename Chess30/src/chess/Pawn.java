@@ -29,7 +29,7 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public void moveTo(int end_i, int end_j, Piece promotion) throws Exception { // i = y, j = x
+	public void moveTo(Position newpos, Piece promotion) throws Exception { // i = y, j = x
 		// TODO Auto-generated method stub
 		this.hasMoved = true;
 		

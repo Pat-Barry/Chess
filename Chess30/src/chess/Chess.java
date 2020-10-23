@@ -24,7 +24,7 @@ public class Chess {
 				break;
 			}
 			try {
-				Board.layout[Input.start_i][Input.start_i].moveTo(Input.end_i, Input.end_j, Input.promotion);
+				Board.layout[Input.start_i][Input.start_i].moveTo(new Position(Input.end_j, Input.end_i), Input.promotion);
 			}
 			catch(Exception e) {
 				System.out.println("Illegal move, try again");
