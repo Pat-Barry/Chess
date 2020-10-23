@@ -5,12 +5,12 @@ public class Chess {
 	
 	static int turn = 0;
 	static boolean drawRequest = false;
-	static int i;
+	public static int gameItteration;
 	
 	public static void main(String[] args) {		
 		Board.render();
 		
-		for (i = 0; true; i++) {
+		for (gameItteration = 0; true; gameItteration++) {
 			try {
 				askForInput();
 			}

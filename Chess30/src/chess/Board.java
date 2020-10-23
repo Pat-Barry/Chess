@@ -20,6 +20,33 @@ public class Board {
 	static Piece getPieceFromDelta(Position p, int x, int y) {
 		return layout[p.y + y][p.x + x];
 	}
+	static void setPiece(Position p, Piece pic) {
+		layout[p.y][p.x] = pic; 
+	}
+	
+	static boolean sameTeam(Position a, Position b) {
+		if(getPiece(a) != null) {
+			if(getPiece(b) != null) {
+				if(getPiece(a).side == getPiece(b).side) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	static boolean noCollisions(Position p1, Position p2) {
+		if(p1.equals(p2)) {
+			throw new IllegalArgumentException("Collision method must take two non-identical positions");
+		}
+		Vector sv = (new Vector(p2, p1)).UnitStepVector(); //for(int x = p2.x - sv.x, y = p2.y - sv.y; p1.equals(x,y) == false; x = x - sv.x, y = y - sv.y) {
+		for(Position i = new Position(p2.x - sv.x, p2.y - sv.y); p1.equals(i) == false; i = new Position(i.x - sv.x, i.y - sv.y)) {
+			if(getPiece(i) != null) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	
 	static void render() {
 		for (int i = 0; i < 8; i++) { // i = 1 - 8
@@ -59,8 +86,8 @@ public class Board {
 		}
 	}
 	
-	void checkIfcheck(int side) {
-		
+	static boolean thisTeamIsInTrouble(int side) {
+		return false;
 	}
 	void checkIfcheckmate(int side) {
 		

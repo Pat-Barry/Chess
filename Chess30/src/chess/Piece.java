@@ -17,4 +17,21 @@ public abstract class Piece {
 
 	public abstract void moveTo(Position newpos, Piece promotion) throws Exception;
 	
+	
+	
+	
+	public boolean enemyAt(Position p) {
+		if(Board.getPiece(p) != null) {
+			if(Board.getPiece(p).side != this.side) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean collisionAt(Position p) {
+		if(Board.getPiece(p) != null) {
+			return true;
+		}
+		return false;
+	}
 }
