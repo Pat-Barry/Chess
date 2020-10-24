@@ -33,6 +33,7 @@ public class Chess {
 			catch(Exception e) {
 				System.out.println(e);
 				System.out.println("Illegal move, try again");
+			//	e.printStackTrace();
 				continue;
 			}
 			if (CurrentBoard.state == -2) {
@@ -46,6 +47,7 @@ public class Chess {
 			}
 			catch(Exception e) {
 				System.out.println("Illegal move, try again");
+			//	e.printStackTrace();
 				System.out.println(e);
 				continue;
 			}

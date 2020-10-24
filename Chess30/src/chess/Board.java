@@ -19,8 +19,19 @@ public class Board implements Serializable {
 		gameItteration = 0;
 		
 		layout[1][1] = new Pawn(0, 1, 1, this);
+		
+		layout[4][0] = new Pawn(0, 0, 4, this);
+		layout[4][1] = new Pawn(0, 1, 4, this);
+		layout[4][2] = new Pawn(0, 2, 4, this);
+		
+		layout[7][0] = new Pawn(0, 0, 7, this);
+		layout[7][1] = new Pawn(0, 1, 7, this);
+		layout[7][2] = new Pawn(0, 2, 7, this);
+		
+		layout[4][4] = new Pawn(1, 4, 4, this);
+		
 		layout[0][3] = new King(0, 3, 0, this);
-		layout[7][3] = new King(1, 3, 7, this); //layout[y][x] = new King(teamID, posX, posY, Board this);
+		layout[6][1] = new King(1, 1, 6, this); //layout[y][x] = new King(teamID, posX, posY, Board this);
 	}
 	
 	public boolean EnemyCanAttack(int s, Position p) {
@@ -127,7 +138,8 @@ public class Board implements Serializable {
 			int ns = 1;
 			if(s == 1) ns = 0;
 			if(this.KingIsChecked(ns)) {
-				if(!this.KingCanRecover(s)) {
+				System.out.println("ns is checked");
+				if(!this.KingCanRecover(ns)) {
 					this.state = s;
 				}
 			}
@@ -152,14 +164,16 @@ public class Board implements Serializable {
 		Board rb = this.getCopy();
 		for(int y=0; y < 8; y++) {
 			for(int x=0; x < 8; x++) {
-				if(rb.layout[y][x].side == s) {
-					for(int b=0; b < 8; b++) {
-						for(int a=0; a < 8; a++) {
-							try {
-								rb.movePiece(rb.layout[y][x].pos, new Position(a, b), null, s); // Found a move, where after the move, King is not checked
-								return true;
-							} catch(Exception e) {
-								// That didn't fix the problem, so let's check the next move
+				if(rb.layout[y][x] != null) {
+					if(rb.layout[y][x].side == s) {
+						for(int b=0; b < 8; b++) {
+							for(int a=0; a < 8; a++) {
+								try {
+									rb.movePiece(rb.layout[y][x].pos, new Position(a, b), null, s); // Found a move, where after the move, King is not checked
+									return true;
+								} catch(Exception e) {
+									// That didn't fix the problem, so let's check the next move
+								}
 							}
 						}
 					}
