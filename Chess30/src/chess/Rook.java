@@ -19,7 +19,7 @@ public class Rook extends Piece {
 		if(side == 1) {
 			return "bR";
 		} else {
-			return "wK";
+			return "wR";
 		}
 	}
 

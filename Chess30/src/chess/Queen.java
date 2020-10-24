@@ -15,9 +15,9 @@ public class Queen extends Piece{
 	@Override
 	public String getString() {
 		if(side == 1) {
-			return "bR";
+			return "bQ";
 		} else {
-			return "wK";
+			return "wQ";
 		}
 	}
 

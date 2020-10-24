@@ -18,24 +18,41 @@ public class Board implements Serializable {
 		state = -1;
 		gameItteration = 0;
 		
-		/*layout[1][1] = new Pawn(0, 1, 1, this);
-		
-		layout[4][0] = new Pawn(0, 0, 4, this);
-		layout[4][1] = new Pawn(0, 1, 4, this);
-		layout[4][2] = new Pawn(0, 2, 4, this);
-		
-		layout[7][0] = new Pawn(0, 0, 7, this);
-		layout[7][1] = new Pawn(0, 1, 7, this);
-		layout[7][2] = new Pawn(0, 2, 7, this);
-		
-		layout[4][4] = new Pawn(1, 4, 4, this);
-		
-		layout[0][3] = new King(0, 3, 0, this);
-		layout[6][1] = new King(1, 1, 6, this); //layout[y][x] = new King(teamID, posX, posY, Board this);
-		*/
-		
 		new Pawn(0).setBoard(0, 1, this);
 		new Pawn(0).setBoard(1, 1, this);
+		new Pawn(0).setBoard(2, 1, this);
+		new Pawn(0).setBoard(3, 1, this);
+		new Pawn(0).setBoard(4, 1, this);
+		new Pawn(0).setBoard(5, 1, this);
+		new Pawn(0).setBoard(6, 1, this);
+		new Pawn(0).setBoard(7, 1, this);
+		new Rook(0).setBoard(0, 0, this);
+		new Knight(0).setBoard(1, 0, this);
+		new Bishop(0).setBoard(2, 0, this);
+		new Queen(0).setBoard(3, 0, this);
+		new King(0).setBoard(4, 0, this);
+		new Bishop(0).setBoard(5, 0, this);
+		new Knight(0).setBoard(6, 0, this);
+		new Rook(0).setBoard(7, 0, this);
+		
+		new Pawn(1).setBoard(0, 6, this);
+		new Pawn(1).setBoard(1, 6, this);
+		new Pawn(1).setBoard(2, 6, this);
+		new Pawn(1).setBoard(3, 6, this);
+		new Pawn(1).setBoard(4, 6, this);
+		new Pawn(1).setBoard(5, 6, this);
+		new Pawn(1).setBoard(6, 6, this);
+		new Pawn(1).setBoard(7, 6, this);
+		
+		new Rook(1).setBoard(0, 7, this);
+		new Knight(1).setBoard(1, 7, this);
+		new Bishop(1).setBoard(2, 7, this);
+		new Queen(1).setBoard(3, 7, this);
+		new King(1).setBoard(4, 7, this);
+		new Bishop(1).setBoard(5, 7, this);
+		new Knight(1).setBoard(6, 7, this);
+		new Rook(1).setBoard(7, 7, this);
+		
 	}
 	
 	public boolean EnemyCanAttack(int s, Position p) {
