@@ -1,8 +1,8 @@
 package chess;
 public class Bishop extends Piece{
 
-	public Bishop(int i, int x, int y) {
-		super(i, x, y);
+	public Bishop(int i, int x, int y, Board ParentBoard) {
+		super(i, x, y, ParentBoard);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -13,7 +13,7 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public void moveTo(Position newpos, Piece promotion) throws Exception {
+	public void moveTo(Position newpos, Piece promotion) {
 		// TODO Auto-generated method stub
 		boolean legal = false;
 	

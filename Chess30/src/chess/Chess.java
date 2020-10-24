@@ -7,8 +7,12 @@ public class Chess {
 	static boolean drawRequest = false;
 	public static int gameItteration;
 	
-	public static void main(String[] args) {		
-		Board.render();
+	public static Board CurrentBoard;
+	public static Board DeepCopy;
+	
+	public static void main(String[] args) {
+		CurrentBoard = new Board();
+		CurrentBoard.render();
 		
 		for (gameItteration = 0; true; gameItteration++) {
 			try {
@@ -19,29 +23,30 @@ public class Chess {
 				System.out.println("Illegal move, try again");
 				continue;
 			}
-			if (Board.state == -2) {
+			if (CurrentBoard.state == -2) {
 				System.out.println("draw");
 				break;
 			}
 			try {
-				Board.layout[Input.start_i][Input.start_i].moveTo(new Position(Input.end_j, Input.end_i), Input.promotion);
+				CurrentBoard.layout[Input.start_i][Input.start_i].moveTo(new Position(Input.end_j, Input.end_i), Input.promotion);
 			}
 			catch(Exception e) {
 				System.out.println("Illegal move, try again");
 				continue;
 			}
-			Board.updatePos();
+			CurrentBoard.updatePos();
 			//Check for checkmate
-			Board.render();
-			if (Board.state == 0) {
+			CurrentBoard.render();
+			if (CurrentBoard.state == 0) {
 				System.out.println("White wins");
 				break;
 			}
 			
-			if (Board.state == 1) {
+			if (CurrentBoard.state == 1) {
 				System.out.println("Black wins");
 				break;
 			}
+			CurrentBoard.gameItteration++;
 		}
 
 	}
@@ -73,7 +78,7 @@ public class Chess {
 		System.out.println(s);
 		if (s.equals("draw")) {
 			if (drawRequest) {
-				Board.state = -2;
+				CurrentBoard.state = -2;
 				return;
 			}
 			
@@ -81,21 +86,21 @@ public class Chess {
 		}
 		if (s.length() == 6) { // Resign
 			if (turn == 0) {
-				Board.state = 1;
+				CurrentBoard.state = 1;
 			}
 			else {
-				Board.state = 0;
+				CurrentBoard.state = 0;
 			}
 			return;
 		}
 		Input.start_j = charToInt(s.charAt(0));
 		Input.start_i = -((int) s.charAt(1)) + 8;
 		
-		if (Board.layout[Input.start_i][Input.start_j] == null) {
+		if (CurrentBoard.layout[Input.start_i][Input.start_j] == null) {
 			throw new Exception();
 		}
 		
-		if (Board.layout[Input.start_i][Input.start_j].side == turn) {
+		if (CurrentBoard.layout[Input.start_i][Input.start_j].side == turn) {
 			throw new Exception();
 		}
 		
@@ -133,7 +138,7 @@ public class Chess {
 		Input.promotion = null;
 	}
 	
-	static class Input{
+	static class Input {
 		static int start_i;
 		static int start_j;
 		static int end_i;

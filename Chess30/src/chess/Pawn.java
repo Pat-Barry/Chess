@@ -1,7 +1,5 @@
 package chess;
 
-import java.util.HashMap;
-import java.util.function.Function;
 
 public class Pawn extends Piece {
 
@@ -10,21 +8,19 @@ public class Pawn extends Piece {
 	boolean hasMoved = false;
 	int passantItteration = -1;
 	
-	public Pawn(int s, int x, int y) {
-		super(s, x, y);
+	public Pawn(int s, int x, int y, Board ParentBoard) {
+		super(s, x, y, ParentBoard);
 		if(s == 0) {
-			this.promotion_bar = 7;
-			this.moveDirectionDelta = 1;
+			promotion_bar = 7;
+			moveDirectionDelta = 1;
 		} else {
-			this.promotion_bar = 0;
-			this.moveDirectionDelta = -1;
+			promotion_bar = 0;
+			moveDirectionDelta = -1;
 		}
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String getString() {
-		// TODO Auto-generated method stub
 		if(this.side == 0) {
 			return "wp";
 		} else {
@@ -32,12 +28,12 @@ public class Pawn extends Piece {
 		}
 	}
 
+	
+	
 	@Override
-	public void moveTo(Position newpos, Piece promotion) throws Exception { // i = y, j = x
-		// TODO Auto-generated method stub
+	public void moveTo(Position newpos, Piece promotion) throws Exception {
 		
 		Position capture = newpos;
-		
 		Vector v = new Vector(newpos, this.pos);
 		
 		if(v.equals(0, moveDirectionDelta)) {
@@ -52,7 +48,7 @@ public class Pawn extends Piece {
 				} else {
 					throw new Exception("Trying to move pawn diagonal where there is no piece, or passant pass");
 				}
-			} // else we can take that piece
+			} 
 			
 		} else if(v.equals(0, 2*moveDirectionDelta)) {
 			if(hasMoved) {
@@ -66,6 +62,8 @@ public class Pawn extends Piece {
 			throw new Exception("Move vector does not match a legal move");
 		}
 		
+		// here
+		
 		if(promotion != null && newpos.y != this.promotion_bar) {
 			throw new Exception("Requestion promotion, when not moving to a end of the board");
 		}
@@ -76,15 +74,19 @@ public class Pawn extends Piece {
 		
 		
 		
-		//Now a legal move
+		//Now a legal move unless possibility of checkmate
+		//Board deepcopy = new Board().setToState(currentBoard)
+		
+
+		
 		try {
-			
-			Board.setPiece(capture, null);
-			Board.setPiece(this.pos, null);
+			this.hasMoved = true;
+			ParentBoard.setPiece(capture, null);
+			ParentBoard.setPiece(this.pos, null);
 			if(newpos.y == this.promotion_bar) {
-				Board.setPiece(newpos, promotion);
+				ParentBoard.setPiece(newpos, promotion);
 			} else {
-				Board.setPiece(newpos, this);
+				ParentBoard.setPiece(newpos, this);
 			}
 			if(Board.thisTeamIsInTrouble(this.side) ) {
 				throw new Exception("This move causes pawn's king to be in danger");
@@ -94,12 +96,14 @@ public class Pawn extends Piece {
 		}
 	}
 	
+	
+	
 	boolean isPassantPawnAt(Position p) {
-		if(Board.getPiece(p) == null) {
+		if(ParentBoard.getPiece(p) == null) {
 			return false;
 		}
-		if(Board.getPiece(p) instanceof Pawn) {
-			Pawn pwn = (Pawn) Board.getPiece(p);
+		if(ParentBoard.getPiece(p) instanceof Pawn) {
+			Pawn pwn = (Pawn) ParentBoard.getPiece(p);
 			if(pwn.side != this.side) {
 				if(pwn.passantItteration == Chess.gameItteration - 1) {
 					return true;
@@ -107,6 +111,12 @@ public class Pawn extends Piece {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public boolean canMoveTo(Position newpos) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
