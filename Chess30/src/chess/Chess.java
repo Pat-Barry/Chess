@@ -84,6 +84,8 @@ public class Chess {
 	}
 	
 	public static void askForInput() throws Exception{
+		
+		
 		//System.out.println("IN ask for input");
 		//wait(1000);
 		clearInput();
@@ -98,6 +100,54 @@ public class Chess {
 		Scanner in = new Scanner(System.in);         
 		String s = in.nextLine();
 		System.out.println(s);
+		
+		
+		if (s.length() == 2) {
+			Input.start_j = charToInt(s.charAt(0));
+			Input.start_i = Integer.parseInt( Character.toString(s.charAt(1)) ) - 1;
+			
+			
+			Position newpos = new Position(Input.start_j, Input.start_i);
+			Piece showMovePiece = CurrentBoard.getPiece(newpos);
+			if(showMovePiece == null) {
+				throw new Exception("There is no piece that can be tested here");
+				
+			}
+			if(showMovePiece.side != turn) {
+				throw new Exception("Cannot look at other team's moves");
+			}
+			Board moveBoard = new Board();
+			for(int y = 0; y < 8; y++) {
+				for(int x = 0; x < 8; x++) {
+					moveBoard.layout[y][x] = null;
+				}
+			}
+			
+			for(int y = 0; y < 8; y++) {
+				for(int x = 0; x < 8; x++) {
+					System.out.println("loop");
+					try {
+						Board boardClone = CurrentBoard.getCopy();
+						boardClone.movePiece(newpos, new Position(x, y), new Queen(turn), turn);
+						moveBoard.layout[y][x] = new Filler(0);
+						System.out.println("we found a move on "+x+" and "+y);
+					} catch(Exception e) {
+						Exception ne = new Exception("Move cannot be done, King is checked");
+						if(ne.equals(e)) {
+							moveBoard.layout[y][x] = new Filler(1);
+						} else {
+							moveBoard.layout[y][x] = null;
+						}
+					}
+				}
+			}
+			moveBoard.render();
+			//boardClone.movePiece(newpos, np, new Queen(turn), turn);
+			
+			
+			return;
+		}
+		
 		if (s.equals("draw")) {
 			if (drawRequest) {
 				CurrentBoard.state = -2;
@@ -146,20 +196,17 @@ public class Chess {
 		
 	}
 	
-	public static Piece charToPiece(char s) throws Exception {
+	public static Piece charToPiece(char s) {
 		if (s == 'N') {
-			
+			return new Knight(turn);
 		}
 		if (s == 'R') {
-			
+			return new Rook(turn);
 		}
 		if (s == 'B') {
-			
+			return new Bishop(turn);
 		}
-		if (s == 'Q') {
-			Input.promotion = new Queen(turn);
-		}
-		throw new Exception("Promotion input must be N/R/B/Q");
+		return new Queen(turn);
 	}
 	
 	public static void clearInput() {
