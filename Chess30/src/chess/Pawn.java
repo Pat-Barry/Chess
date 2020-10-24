@@ -97,13 +97,15 @@ public class Pawn extends Piece {
 		ParentBoard.setPiece(capture, null);
 		ParentBoard.setPiece(this.pos, null);
 		if(newpos.y == this.promotion_bar) {
-			ParentBoard.setPiece(newpos, promotion);
+			if(promotion == null) {
+				throw new IllegalArgumentException("No promotion converted");
+			}
+			//ParentBoard.setPiece(newpos, promotion);
+			promotion.setBoard(newpos.x, newpos.y, ParentBoard);
 		} else {
 			ParentBoard.setPiece(newpos, this);
-		}
-		
+		}	
 	}
-	
 	
 	
 	boolean isPassantPawnAt(Position p) {

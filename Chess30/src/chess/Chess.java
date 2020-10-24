@@ -157,7 +157,7 @@ public class Chess {
 			
 		}
 		if (s == 'Q') {
-			
+			Input.promotion = new Queen(turn);
 		}
 		throw new Exception("Promotion input must be N/R/B/Q");
 	}
