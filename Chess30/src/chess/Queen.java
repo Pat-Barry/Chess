@@ -1,26 +1,25 @@
 package chess;
-public class Bishop extends Piece{
 
-	public Bishop(int i, int x, int y, Board ParentBoard) {
+public class Queen extends Piece{
+
+	public Queen(int i, int x, int y, Board ParentBoard) {
 		super(i, x, y, ParentBoard);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String getString() {
-		// TODO Auto-generated method stub
 		if(side == 1) {
-			return "bB";
+			return "bR";
 		} else {
-			return "wB";
+			return "wK";
 		}
 	}
 
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws Exception {
-		// TODO Auto-generated method stub
 		Vector v = new Vector(newpos, this.pos);
-		if(v.variationOf(-1, 1)) {
+		if(v.variationOf(-1, 1) || v.variationOf(0, 1)) {
 			if (this.ParentBoard.noCollisions(pos, newpos)) {
 				if (friendAt(newpos)) {
 					throw new Exception("Can't Friendly Fire");
@@ -32,14 +31,13 @@ public class Bishop extends Piece{
 				}
 			}
 			else {
-				throw new Exception("Collision Detected in Bishop movement");
+				throw new Exception("Collision Detected in Queen movement");
 			}
 		}
 		else {
 			throw new Exception("Vector is not in step shape");
 		}
-	
+		
 	}
-
 
 }

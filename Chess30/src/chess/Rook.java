@@ -19,8 +19,26 @@ public class Rook extends Piece {
 
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws Exception {
-		throw new Exception();
-		//this.hasMoved = true;
+		Vector v = new Vector(newpos, this.pos);
+		if(v.variationOf(0, 1)) {
+			if (this.ParentBoard.noCollisions(pos, newpos)) {
+				if (friendAt(newpos)) {
+					throw new Exception("Can't Friendly Fire");
+				}
+				
+				else {
+					ParentBoard.setPiece(newpos, this);
+					ParentBoard.setPiece(pos, null);
+					this.hasMoved = true;
+				}
+			}
+			else {
+				throw new Exception("Collision Detected in Rook movement");
+			}
+		}
+		else {
+			throw new Exception("Vector is not in step shape");
+		}
 	}
 	
 }

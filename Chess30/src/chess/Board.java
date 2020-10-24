@@ -18,7 +18,7 @@ public class Board implements Serializable {
 		state = -1;
 		gameItteration = 0;
 		
-		layout[1][1] = new Pawn(0, 1, 1, this);
+		/*layout[1][1] = new Pawn(0, 1, 1, this);
 		
 		layout[4][0] = new Pawn(0, 0, 4, this);
 		layout[4][1] = new Pawn(0, 1, 4, this);
@@ -32,6 +32,7 @@ public class Board implements Serializable {
 		
 		layout[0][3] = new King(0, 3, 0, this);
 		layout[6][1] = new King(1, 1, 6, this); //layout[y][x] = new King(teamID, posX, posY, Board this);
+		*/
 	}
 	
 	public boolean EnemyCanAttack(int s, Position p) {

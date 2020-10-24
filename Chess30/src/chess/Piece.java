@@ -25,6 +25,10 @@ public abstract class Piece implements Serializable {
 	public void updatePos(int x, int y) {
 		this.pos.x = x; this.pos.y = y;
 	}
+	
+	public Piece(int i) {
+		this.side = i;
+	}
 
 	public abstract String getString();
 
