@@ -19,10 +19,4 @@ public class King extends Piece {
 		
 	}
 
-	@Override
-	public boolean canMoveTo(Position newpos) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

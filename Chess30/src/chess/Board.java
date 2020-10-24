@@ -19,29 +19,17 @@ public class Board implements Serializable {
 		gameItteration = 0;
 	}
 	
-	public Board getCopy() {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(baos);
-			oos.writeObject(this);
-			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-			ObjectInputStream ois = new ObjectInputStream(bais);
-			return (Board) ois.readObject();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Clone failed");
-		}
-	}
-	
-	public boolean KingIsChecked(int s) {
+	public boolean KingIsChecked(int s) { // this.KingIsChecked() checks if team S is checked on "this" board.
+		                                  // First, it makes a clone of "this" board to test.
+										  // Second, it checks if there exists a move from !S -> S_King. If there exists 1, it returns true. 
+		Board bc = this.getCopy();
 		Position TroubledKingPos = new Position(-1,-1);
 		boolean foundKing = false;
 		for(int y=0; y < 8; y++) {
 			for(int x=0; x < 8; x++) {
-				if(layout[y][x] instanceof King) {
-					if(layout[y][x].side == s) {
-						TroubledKingPos = layout[y][x].pos;
+				if(bc.layout[y][x] instanceof King) {
+					if(bc.layout[y][x].side == s) {
+						TroubledKingPos = bc.layout[y][x].pos;
 						foundKing = true;
 						break;
 					}
@@ -53,36 +41,86 @@ public class Board implements Serializable {
 		}
 		for(int y=0; y < 8; y++) {
 			for(int x=0; x < 8; x++) {
-				if(layout[y][x].side != s) {
-					if(layout[y][x].canMoveTo(TroubledKingPos)) {
+				if(bc.layout[y][x].side != s) {
+					try { 
+						bc.layout[y][x].moveTo(TroubledKingPos, null);
 						return true;
+					} catch(Exception e) {
+						
 					}
 				}
 			}
 		}
 		return false;
 	}
+	
+	public void movePiece(Position p, Position np, Piece prom, int s) throws Exception { 
+		
+		/* 
+		 * This is the public-API to move a piece on a board. It makes a clone of the "this" board.
+		 * Then it tests to see of the piece_at_position_p.moveTo(np) call is valid on the clone.
+		 * If it is valid, it checks if team S on the cloned board is in a checked state.
+		 * If it is still valid, it calls the moveTo() on the this board.
+		 * 
+		 */
+		
+		if(this.getPiece(p) == null) {
+			throw new Exception("No piece located at p");
+		}
+		if(this.getPiece(p).side != s) {
+			throw new Exception("Piece at p is not from team "+s);
+		}
+		try {
+			Board boardclone = this.getCopy();
+			boardclone.getPiece(p).moveTo(np, prom); // This call throws exception if illegal move EXCEPT for check checking
+			boardclone.updatePos();
+			boardclone.gameItteration++;
+			
+			if(boardclone.KingIsChecked(s)) { // This call throws exception if the previous call was found to check the King
+				throw new Exception("Move cannot be done, King is checked");
+			}
+
+			this.getPiece(p).moveTo(np, prom); // Run the move, if it (1) is okay with moveTo and (2) doesn't cause KingIsChecked
+			this.updatePos();
+			this.gameItteration++;
+			
+			int ns = 1;
+			if(s == 1) {
+				ns = 0;
+			}
+			
+			if(this.KingIsChecked(ns)) {
+				if(!this.KingCanRecover(s)) {
+					this.state = s;
+				}
+			}
+			
+		} catch(Exception e) {
+			throw new Exception(e);
+		}
+	}
+	
 	public boolean KingCanRecover(int s) {
+		
+		/* Creates a clone of the 'this' board rc. 
+		 * Uses the public-API movePiece to, for every S_Piece on the board, see if there exists a move S_Piece -> Spot such that there is no longer a check.
+		 * If the move does not exist, the king cannot recover. 
+		 */
+		
 		if(!KingIsChecked(s)) {
 			throw new RuntimeException("This method should not be called");
 		}
+		Board rb = this.getCopy();
 		for(int y=0; y < 8; y++) {
 			for(int x=0; x < 8; x++) {
-				if(layout[y][x].side == s) {
-					for(int a=0; a < 8; a++) {
-						for(int b=0; b < 8; b++) {
-							if(layout[y][x].canMoveTo(new Position(a, b))) {
-								Board boardcopy = this.getCopy();
-								try {
-									boardcopy.layout[x][y].moveTo(new Position(a, b), null);
-									boardcopy.gameItteration++;
-									if(!boardcopy.KingIsChecked(s)) {
-										return true;
-									}
-								} catch(Exception e) {
-									System.out.println("Copy doesn't have parallel move ability");
-									System.out.println(e);
-								}
+				if(rb.layout[y][x].side == s) {
+					for(int b=0; b < 8; b++) {
+						for(int a=0; a < 8; a++) {
+							try {
+								rb.movePiece(rb.layout[y][x].pos, new Position(a, b), null, s); // Found a move, where after the move, King is not checked
+								return true;
+							} catch(Exception e) {
+								// That didn't fix the problem, so let's check the next move
 							}
 						}
 					}
@@ -104,9 +142,6 @@ public class Board implements Serializable {
 	
 	Piece getPiece(Position p) {
 		return layout[p.y][p.x];
-	}
-	Piece getPieceFromDelta(Position p, int x, int y) {
-		return layout[p.y + y][p.x + x];
 	}
 	void setPiece(Position p, Piece pic) {
 		layout[p.y][p.x] = pic; 
@@ -172,13 +207,36 @@ public class Board implements Serializable {
 			}
 			System.out.println();
 		}
-	}
+	}	
 	
-	static boolean thisTeamIsInTrouble(int side) {
-		return false;
+	public Board getCopy() {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(this);
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ObjectInputStream ois = new ObjectInputStream(bais);
+			return (Board) ois.readObject();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Clone failed");
+		}
 	}
-	void checkIfcheckmate(int side) {
-		
-	}
-			
 }
+
+/*
+if(kbc.layout[y][x].canMoveTo(new Position(a, b))) {
+	Board boardcopy = this.getCopy();
+	try {
+		boardcopy.layout[x][y].moveTo(new Position(a, b), null);
+		boardcopy.gameItteration++;
+		if(!boardcopy.KingIsChecked(s)) {
+			return true;
+		}
+	} catch(Exception e) {
+		System.out.println("Copy doesn't have parallel move ability");
+		System.out.println(e);
+	}
+}
+*/

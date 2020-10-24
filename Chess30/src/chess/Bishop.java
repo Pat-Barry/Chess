@@ -19,6 +19,7 @@ public class Bishop extends Piece{
 	
 	}
 
+
 	//ALL IN MOVETO
 	//Check if legal move for specific piece step shape
 	//Check for collisions except knight

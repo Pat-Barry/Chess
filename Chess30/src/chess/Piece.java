@@ -30,8 +30,6 @@ public abstract class Piece implements Serializable {
 
 	public abstract void moveTo(Position newpos, Piece promotion) throws Exception;
 	
-	public abstract boolean canMoveTo(Position newpos);
-	
 	
 	public boolean enemyAt(Position p) {
 		if(this.ParentBoard.getPiece(p) != null) {

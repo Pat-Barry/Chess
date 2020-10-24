@@ -29,7 +29,6 @@ public class Pawn extends Piece {
 	}
 
 	
-	
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws Exception {
 		
@@ -77,23 +76,15 @@ public class Pawn extends Piece {
 		//Now a legal move unless possibility of checkmate
 		//Board deepcopy = new Board().setToState(currentBoard)
 		
-
-		
-		try {
-			this.hasMoved = true;
-			ParentBoard.setPiece(capture, null);
-			ParentBoard.setPiece(this.pos, null);
-			if(newpos.y == this.promotion_bar) {
-				ParentBoard.setPiece(newpos, promotion);
-			} else {
-				ParentBoard.setPiece(newpos, this);
-			}
-			if(Board.thisTeamIsInTrouble(this.side) ) {
-				throw new Exception("This move causes pawn's king to be in danger");
-			}
-		} catch(Exception e) {
-			throw new Exception(e);
+		this.hasMoved = true;
+		ParentBoard.setPiece(capture, null);
+		ParentBoard.setPiece(this.pos, null);
+		if(newpos.y == this.promotion_bar) {
+			ParentBoard.setPiece(newpos, promotion);
+		} else {
+			ParentBoard.setPiece(newpos, this);
 		}
+		
 	}
 	
 	
@@ -112,13 +103,6 @@ public class Pawn extends Piece {
 		}
 		return false;
 	}
-
-	@Override
-	public boolean canMoveTo(Position newpos) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 
 }
@@ -150,3 +134,23 @@ if(this.pos.isDeltaFrom(newpos, 0, 2)) {
 //Check if it would cause checkmate for your own team, use check for checkmate func
 //If piece is other team, capture
 //If null moveTo
+
+/*
+ 
+		try {
+			this.hasMoved = true;
+			ParentBoard.setPiece(capture, null);
+			ParentBoard.setPiece(this.pos, null);
+			if(newpos.y == this.promotion_bar) {
+				ParentBoard.setPiece(newpos, promotion);
+			} else {
+				ParentBoard.setPiece(newpos, this);
+			}
+			if(Board.thisTeamIsInTrouble(this.side) ) {
+				throw new Exception("This move causes pawn's king to be in danger");
+			}
+		} catch(Exception e) {
+			throw new Exception(e);
+		}
+		
+		*/
