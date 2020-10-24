@@ -62,7 +62,7 @@ public abstract class Piece implements Serializable {
 				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 	public boolean collisionAt(Position p) { //Returns true if piece is null, false if friend or enemy piece
 		if(this.ParentBoard.getPiece(p) != null) {
