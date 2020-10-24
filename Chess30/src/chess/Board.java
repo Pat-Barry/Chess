@@ -190,7 +190,7 @@ public class Board implements Serializable {
 						for(int b=0; b < 8; b++) {
 							for(int a=0; a < 8; a++) {
 								try {
-									rb.movePiece(rb.layout[y][x].pos, new Position(a, b), null, s); // Found a move, where after the move, King is not checked
+									rb.movePiece(rb.layout[y][x].pos, new Position(a, b), new Queen(s), s); // Found a move, where after the move, King is not checked
 									return true;
 								} catch(Exception e) {
 									// That didn't fix the problem, so let's check the next move

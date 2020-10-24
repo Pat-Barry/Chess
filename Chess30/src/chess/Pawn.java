@@ -49,13 +49,15 @@ public class Pawn extends Piece {
 		
 		Position capture = newpos;
 		Vector v = new Vector(newpos, this.pos);
+		
 		//System.out.println("Vector " + v.x +" "+ v.y);
 		
 		if(v.equals(0, moveDirectionDelta)) {
-		//	System.out.println("Vector is a match for 01");
+	//	System.out.println("Vector is a match for 01");
 			if(this.collisionAt(newpos) ) {
 				throw new Exception("Cannot move pawn ahead, there is a collision");
 			}
+		//	System.out.println("Passed if else 01");
 			
 		} else if(v.equals(-1, moveDirectionDelta) || v.equals(1, moveDirectionDelta)) {
 			if(!this.enemyAt(newpos) ) {
@@ -79,13 +81,17 @@ public class Pawn extends Piece {
 		}
 		
 		// here
-		
+		/*
 		if(promotion != null && newpos.y != this.promotion_bar) {
+			System.out.println("e1");
 			throw new Exception("Requestion promotion, when not moving to a end of the board");
 		}
+		*/
 		if(newpos.y == this.promotion_bar && promotion == null) {
+			//System.out.println("e2");
 			throw new Exception("Must request promotion upon reaching promotion bar");
 		}
+		
 		
 		
 		//Chess.wait(1000);
@@ -98,11 +104,14 @@ public class Pawn extends Piece {
 		ParentBoard.setPiece(this.pos, null);
 		if(newpos.y == this.promotion_bar) {
 			if(promotion == null) {
+				//System.out.println("Null promo");
 				throw new IllegalArgumentException("No promotion converted");
 			}
+			//System.out.println("new queen");
 			//ParentBoard.setPiece(newpos, promotion);
 			promotion.setBoard(newpos.x, newpos.y, ParentBoard);
 		} else {
+			//System.out.println("Setting");
 			ParentBoard.setPiece(newpos, this);
 		}	
 	}

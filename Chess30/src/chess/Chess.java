@@ -31,6 +31,7 @@ public class Chess {
 			}
 			
 			catch(Exception e) {
+				//System.out.println("34");
 				System.out.println(e);
 				System.out.println("Illegal move, try again");
 			//	e.printStackTrace();
@@ -41,6 +42,7 @@ public class Chess {
 				break;
 			}
 			try {
+				//System.out.println("35");
 				//CurrentBoard.layout[Input.start_i][Input.start_i].moveTo(new Position(Input.end_j, Input.end_i), Input.promotion);
 				System.out.println("Moving "+Input.start_j+" "+  Input.start_i+" to "+Input.end_j+" "+Input.end_i+" on turn "+turn);
 				CurrentBoard.movePiece(new Position(Input.start_j,  Input.start_i), new Position(Input.end_j, Input.end_i), Input.promotion, turn);
@@ -105,10 +107,12 @@ public class Chess {
 		if (s.length() == 2) {
 			Input.start_j = charToInt(s.charAt(0));
 			Input.start_i = Integer.parseInt( Character.toString(s.charAt(1)) ) - 1;
-			
-			
-			Position newpos = new Position(Input.start_j, Input.start_i);
-			Piece showMovePiece = CurrentBoard.getPiece(newpos);
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			//System.out.println("Pos x = "+Input.start_j+"pos y is "+Input.start_i);
+			Position cpos = new Position(Input.start_j, Input.start_i);
+			Piece showMovePiece = CurrentBoard.getPiece(cpos);
 			if(showMovePiece == null) {
 				throw new Exception("There is no piece that can be tested here");
 				
@@ -116,25 +120,32 @@ public class Chess {
 			if(showMovePiece.side != turn) {
 				throw new Exception("Cannot look at other team's moves");
 			}
+			if(showMovePiece instanceof Knight) {
+				System.out.println("have showmovepiece as knight");
+			}
+			
 			Board moveBoard = new Board();
 			for(int y = 0; y < 8; y++) {
 				for(int x = 0; x < 8; x++) {
 					moveBoard.layout[y][x] = null;
 				}
 			}
+
 			
 			for(int y = 0; y < 8; y++) {
 				for(int x = 0; x < 8; x++) {
-					System.out.println("loop");
+					//System.out.println("loop");
 					try {
 						Board boardClone = CurrentBoard.getCopy();
-						boardClone.movePiece(newpos, new Position(x, y), new Queen(turn), turn);
-						moveBoard.layout[y][x] = new Filler(0);
-						System.out.println("we found a move on "+x+" and "+y);
+					//	System.out.println("Trying to move to "+x+" and "+y);
+						boardClone.movePiece(cpos, new Position(x, y), new Queen(turn), turn);
+						new Filler(0).setBoard(x, y, moveBoard);
+					//	System.out.println("we found a move on "+x+" and "+y);
 					} catch(Exception e) {
 						Exception ne = new Exception("Move cannot be done, King is checked");
 						if(ne.equals(e)) {
-							moveBoard.layout[y][x] = new Filler(1);
+							new Filler(1).setBoard(x, y, moveBoard);
+							//moveBoard.layout[y][x] = new Filler(1);
 						} else {
 							moveBoard.layout[y][x] = null;
 						}
@@ -144,8 +155,8 @@ public class Chess {
 			moveBoard.render();
 			//boardClone.movePiece(newpos, np, new Queen(turn), turn);
 			
-			
-			return;
+			throw new Exception("Completed Checking Moves");
+		//	return;
 		}
 		
 		if (s.equals("draw")) {
