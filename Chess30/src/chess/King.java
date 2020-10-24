@@ -14,6 +14,17 @@ public class King extends Piece {
 			this.castleBar = 7;
 		}
 	}
+	
+	public King(int i) {
+		super(i);
+		this.side = i;
+		this.hasMoved = false;
+		if(i == 0) {
+			this.castleBar = 0;
+		} else {
+			this.castleBar = 7;
+		}
+	}
 
 	@Override
 	public String getString() {

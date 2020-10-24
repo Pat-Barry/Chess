@@ -29,6 +29,12 @@ public abstract class Piece implements Serializable {
 	public Piece(int i) {
 		this.side = i;
 	}
+	
+	public void setBoard(int x, int y, Board ParentBoard) {
+		this.ParentBoard = ParentBoard;
+		ParentBoard.layout[y][x] = this;
+		this.pos = new Position(x,y);
+	}
 
 	public abstract String getString();
 

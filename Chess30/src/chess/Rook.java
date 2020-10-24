@@ -7,6 +7,12 @@ public class Rook extends Piece {
 		super(s, x, y, ParentBoard);
 		this.hasMoved = false;
 	}
+	
+	public Rook(int i) {
+		super(i);
+		this.side = i;
+		this.hasMoved = false;
+	}
 
 	@Override
 	public String getString() {

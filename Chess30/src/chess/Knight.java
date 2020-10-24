@@ -6,6 +6,11 @@ public class Knight extends Piece{
 		super(i, x, y, ParentBoard);
 		
 	}
+	
+	public Knight(int i) {
+		super(i);
+		this.side = i;
+	}
 
 	@Override
 	public String getString() {

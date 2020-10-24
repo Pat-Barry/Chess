@@ -33,6 +33,9 @@ public class Board implements Serializable {
 		layout[0][3] = new King(0, 3, 0, this);
 		layout[6][1] = new King(1, 1, 6, this); //layout[y][x] = new King(teamID, posX, posY, Board this);
 		*/
+		
+		new Pawn(0).setBoard(0, 1, this);
+		new Pawn(0).setBoard(1, 1, this);
 	}
 	
 	public boolean EnemyCanAttack(int s, Position p) {

@@ -6,6 +6,11 @@ public class Queen extends Piece{
 		super(i, x, y, ParentBoard);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Queen(int i) {
+		super(i);
+		this.side = i;
+	}
 
 	@Override
 	public String getString() {
