@@ -17,11 +17,36 @@ public class Board implements Serializable {
 		stringBoard = new String[8][8];
 		state = -1;
 		gameItteration = 0;
+		
+		layout[1][1] = new Pawn(0, 1, 1, this);
+		layout[0][3] = new King(0, 3, 0, this);
+		layout[7][3] = new King(1, 3, 7, this); //layout[y][x] = new King(teamID, posX, posY, Board this);
+	}
+	
+	public boolean EnemyCanAttack(int s, Position p) {
+		Board bc = this.getCopy();
+		Position TroubledKingPos = p;
+		for(int y=0; y < 8; y++) {
+			for(int x=0; x < 8; x++) {
+				if(bc.layout[y][x] != null) {
+					if(bc.layout[y][x].side != s) {
+						try { 
+							bc.layout[y][x].moveTo(TroubledKingPos, null);
+							return true;
+						} catch(Exception e) {
+							
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	public boolean KingIsChecked(int s) { // this.KingIsChecked() checks if team S is checked on "this" board.
 		                                  // First, it makes a clone of "this" board to test.
 										  // Second, it checks if there exists a move from !S -> S_King. If there exists 1, it returns true. 
+		//Chess.wait(1000);
 		Board bc = this.getCopy();
 		Position TroubledKingPos = new Position(-1,-1);
 		boolean foundKing = false;
@@ -36,17 +61,21 @@ public class Board implements Serializable {
 				}
 			}
 		}
+		//System.out.println("after kf");
 		if(!foundKing) {
 			throw new RuntimeException("Could not find King");
 		}
 		for(int y=0; y < 8; y++) {
 			for(int x=0; x < 8; x++) {
-				if(bc.layout[y][x].side != s) {
-					try { 
-						bc.layout[y][x].moveTo(TroubledKingPos, null);
-						return true;
-					} catch(Exception e) {
-						
+				if(bc.layout[y][x] != null) {
+					if(bc.layout[y][x].side != s) {
+						try { 
+							//System.out.println("Trying move");
+							bc.layout[y][x].moveTo(TroubledKingPos, null);
+							return true;
+						} catch(Exception e) {
+							
+						}
 					}
 				}
 			}
@@ -56,6 +85,8 @@ public class Board implements Serializable {
 	
 	public void movePiece(Position p, Position np, Piece prom, int s) throws Exception { 
 		
+		
+		//System.out.println("MP Called");
 		/* 
 		 * This is the public-API to move a piece on a board. It makes a clone of the "this" board.
 		 * Then it tests to see of the piece_at_position_p.moveTo(np) call is valid on the clone.
@@ -64,6 +95,11 @@ public class Board implements Serializable {
 		 * 
 		 */
 		
+		//Chess.wait(1000);
+		//System.out.println(p.x + " and "+p.y);
+		//if(this.layout[0][3] == null) {
+			//System.out.println("0 3 is null");
+		//}
 		if(this.getPiece(p) == null) {
 			throw new Exception("No piece located at p");
 		}
@@ -76,19 +112,20 @@ public class Board implements Serializable {
 			boardclone.updatePos();
 			boardclone.gameItteration++;
 			
+			//System.out.println("Before King is Checked for Checked");
+			
 			if(boardclone.KingIsChecked(s)) { // This call throws exception if the previous call was found to check the King
 				throw new Exception("Move cannot be done, King is checked");
 			}
+			
+			//System.out.println("After king is checked for check");
 
 			this.getPiece(p).moveTo(np, prom); // Run the move, if it (1) is okay with moveTo and (2) doesn't cause KingIsChecked
 			this.updatePos();
 			this.gameItteration++;
 			
 			int ns = 1;
-			if(s == 1) {
-				ns = 0;
-			}
-			
+			if(s == 1) ns = 0;
 			if(this.KingIsChecked(ns)) {
 				if(!this.KingCanRecover(s)) {
 					this.state = s;
@@ -101,6 +138,8 @@ public class Board implements Serializable {
 	}
 	
 	public boolean KingCanRecover(int s) {
+		
+		System.out.println("KCR");
 		
 		/* Creates a clone of the 'this' board rc. 
 		 * Uses the public-API movePiece to, for every S_Piece on the board, see if there exists a move S_Piece -> Spot such that there is no longer a check.
@@ -130,6 +169,17 @@ public class Board implements Serializable {
 		return false;
 	}
 
+	void verifyPosIntegrity() {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if(layout[i][j] != null) {
+					if(layout[i][j].pos.x != j && layout[i][j].pos.y != i) {
+						System.out.println("WARNING! Layout["+i+"]["+j+"] does not match ("+i+","+j+")");
+					}
+				}
+			}
+		}
+	}
 	void updatePos() {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) { 
@@ -140,8 +190,8 @@ public class Board implements Serializable {
 		}
 	}
 	
-	Piece getPiece(Position p) {
-		return layout[p.y][p.x];
+	public Piece getPiece(Position p) {
+		return this.layout[p.y][p.x];
 	}
 	void setPiece(Position p, Piece pic) {
 		layout[p.y][p.x] = pic; 
@@ -205,8 +255,16 @@ public class Board implements Serializable {
 				System.out.print(stringBoard[i][j] + " ");
 				
 			}
+			System.out.print(" "+(i+1));
 			System.out.println();
 		}
+		char[] charArray = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+		System.out.print(" ");
+		for (int i=0; i < 7; i++) {
+			System.out.print(charArray[i]+"  ");
+		}
+		System.out.println(charArray[7]);
+		System.out.println();
 	}	
 	
 	public Board getCopy() {

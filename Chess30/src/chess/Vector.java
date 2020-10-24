@@ -7,11 +7,13 @@ public class Vector {
 		this.x = x;
 		this.y = y;
 	}
-	public Vector(Position t, Position i) { //Create new vector with t= new pos and i= this.pos
-		this.x = t.x - i.x;
-		this.y = t.y - i.y;
+	public Vector(Position np, Position p) { //Create new vector with t= new pos and i= this.pos
+		//System.out.println(np.x +" and "+p.x);
+		//System.out.println(np.y +" and "+p.y);
+		this.x = np.x - p.x;
+		this.y = np.y - p.y;
 		if(this.x == 0 && this.y == 0) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Vector cannot be a 0 0 vector");
 		}	
 	}
 	
@@ -19,11 +21,23 @@ public class Vector {
 		return this.x == p.x && this.y == p.y;
 	}
 	public boolean equals(int x, int y) {
-		return this.equals(new Vector(x,y));
+		return this.x == x && this.y == y;
+	}
+	public String toString() {
+		return "<"+this.x+","+this.y+">";
 	}
 	
 		
-	
+	public boolean variationOfWithLimit(int x, int y, double limit) {
+		if(!this.variationOf(x, y)) {
+			return false;
+		} 
+		if(Math.abs(this.x) > limit || Math.abs(this.y) > limit) {
+		//	System.out.println("This x "+this.x+" and "+this.y);
+			return false;
+		}
+		return true;
+	}
 	
 	public boolean variationOf(int x, int y) { //checks if the vector matches the <x, y> pattern given, L = <1, 2>, R = <0, 1>, B = <1, 1>
 		if( (x == 0 && y == 0) || (this.x == 0 && this.y == 0) ) {
@@ -35,13 +49,18 @@ public class Vector {
 		// The below if statements confirm <5,0> is a rook move by making sure <5,0> and <0,1> both have 1 zero. 
 		
 		if( x == 0 || y == 0 ) { 
+		//	System.out.println("A");
 			//<0,1> has a 0 in it
+		//	System.out.println("This x "+this.x+" and "+this.y);
 			if( this.x == 0 || this.y == 0 ) { 
+		//		System.out.println("B");
 				return true; //<0,1> and <5,0> have a 0 in it
 			}
+		//	System.out.println("C");
 			return false; // <0,1> has a 0 in it but <5,0> does not have a 0
 			
 		} else if( this.x == 0 || this.y == 0 ) {
+		//	System.out.println("D");
 			return false; // <0,1> does not have a 0 in it, but <5,0> does have a 0. 
 		}
 	
@@ -57,6 +76,8 @@ public class Vector {
 		}
 		return false;
 	}
+	
+	
 	
 	public Vector UnitStepVector() { // Converts <4, -4> to <1, -1>
 		if(this.x == 0) {

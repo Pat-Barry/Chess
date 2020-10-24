@@ -10,16 +10,28 @@ public class Chess {
 	public static Board CurrentBoard;
 	public static Board DeepCopy;
 	
+	public static void wait(int ms){
+		try {
+			Thread.sleep(ms);
+		} catch(Exception e) {
+			
+		}
+	}
+	
 	public static void main(String[] args) {
 		CurrentBoard = new Board();
 		CurrentBoard.render();
 		
+
 		for (gameItteration = 0; true; gameItteration++) {
+			//System.out.println("game itt "+gameItteration);
+			//wait(1000);
 			try {
 				askForInput();
 			}
 			
 			catch(Exception e) {
+				System.out.println(e);
 				System.out.println("Illegal move, try again");
 				continue;
 			}
@@ -28,13 +40,16 @@ public class Chess {
 				break;
 			}
 			try {
-				CurrentBoard.layout[Input.start_i][Input.start_i].moveTo(new Position(Input.end_j, Input.end_i), Input.promotion);
+				//CurrentBoard.layout[Input.start_i][Input.start_i].moveTo(new Position(Input.end_j, Input.end_i), Input.promotion);
+				System.out.println("Moving "+Input.start_j+" "+  Input.start_i+" to "+Input.end_j+" "+Input.end_i+" on turn "+turn);
+				CurrentBoard.movePiece(new Position(Input.start_j,  Input.start_i), new Position(Input.end_j, Input.end_i), Input.promotion, turn);
 			}
 			catch(Exception e) {
 				System.out.println("Illegal move, try again");
+				System.out.println(e);
 				continue;
 			}
-			CurrentBoard.updatePos();
+			//CurrentBoard.updatePos();
 			//Check for checkmate
 			CurrentBoard.render();
 			if (CurrentBoard.state == 0) {
@@ -46,7 +61,10 @@ public class Chess {
 				System.out.println("Black wins");
 				break;
 			}
+			if(turn == 1) { turn = 0; } else { turn = 1; }
 			CurrentBoard.gameItteration++;
+			
+			CurrentBoard.verifyPosIntegrity();
 		}
 
 	}
@@ -64,6 +82,8 @@ public class Chess {
 	}
 	
 	public static void askForInput() throws Exception{
+		//System.out.println("IN ask for input");
+		//wait(1000);
 		clearInput();
 		
 		if (turn == 0) {
@@ -82,7 +102,7 @@ public class Chess {
 				return;
 			}
 			
-			throw new Exception();
+			throw new Exception("requesting draw when is none");
 		}
 		if (s.length() == 6) { // Resign
 			if (turn == 0) {
@@ -94,18 +114,20 @@ public class Chess {
 			return;
 		}
 		Input.start_j = charToInt(s.charAt(0));
-		Input.start_i = -((int) s.charAt(1)) + 8;
+		Input.start_i = Integer.parseInt( Character.toString(s.charAt(1)) ) - 1; //-Integer.parseInt( Character.toString(s.charAt(1)) ) + 8;
+		
+		//System.out.println(Input.start_i + " and startj "+Input.start_j);
 		
 		if (CurrentBoard.layout[Input.start_i][Input.start_j] == null) {
-			throw new Exception();
+			throw new Exception("start spot is null");
 		}
 		
-		if (CurrentBoard.layout[Input.start_i][Input.start_j].side == turn) {
-			throw new Exception();
+		if (CurrentBoard.layout[Input.start_i][Input.start_j].side != turn) {
+			throw new Exception("start side is not equal to turn");
 		}
 		
 		Input.end_j = charToInt(s.charAt(3));
-		Input.end_i = -((int) s.charAt(4)) + 8;
+		Input.end_i =  Integer.parseInt( Character.toString(s.charAt(4)) ) - 1; //-((int) s.charAt(4)) + 8;
 		
 		if (s.length() < 6) {// Regular Move
 			return;
@@ -122,12 +144,20 @@ public class Chess {
 		
 	}
 	
-	public static Piece charToPiece(char s) {
+	public static Piece charToPiece(char s) throws Exception {
 		if (s == 'N') {
 			
 		}
-		
-		return null;
+		if (s == 'R') {
+			
+		}
+		if (s == 'B') {
+			
+		}
+		if (s == 'Q') {
+			
+		}
+		throw new Exception("Promotion input must be N/R/B/Q");
 	}
 	
 	public static void clearInput() {

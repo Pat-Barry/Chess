@@ -32,10 +32,14 @@ public class Pawn extends Piece {
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws Exception {
 		
+	//	System.out.println("We are being asked to move");
+		
 		Position capture = newpos;
 		Vector v = new Vector(newpos, this.pos);
+		//System.out.println("Vector " + v.x +" "+ v.y);
 		
 		if(v.equals(0, moveDirectionDelta)) {
+		//	System.out.println("Vector is a match for 01");
 			if(this.collisionAt(newpos) ) {
 				throw new Exception("Cannot move pawn ahead, there is a collision");
 			}
@@ -71,7 +75,7 @@ public class Pawn extends Piece {
 		}
 		
 		
-		
+		//Chess.wait(1000);
 		
 		//Now a legal move unless possibility of checkmate
 		//Board deepcopy = new Board().setToState(currentBoard)

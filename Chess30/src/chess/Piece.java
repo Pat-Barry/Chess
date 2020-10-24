@@ -31,7 +31,14 @@ public abstract class Piece implements Serializable {
 	public abstract void moveTo(Position newpos, Piece promotion) throws Exception;
 	
 	
-	public boolean enemyAt(Position p) {
+	
+	
+	
+	
+	
+	
+	
+	public boolean enemyAt(Position p) { //Returns true if enemy at position, false if null or same-team piece
 		if(this.ParentBoard.getPiece(p) != null) {
 			if(this.ParentBoard.getPiece(p).side != this.side) {
 				return true;
@@ -39,7 +46,15 @@ public abstract class Piece implements Serializable {
 		}
 		return false;
 	}
-	public boolean collisionAt(Position p) {
+	public boolean friendAt(Position p) { //Returns true if friend at position, false if null or enemy piece
+		if(this.ParentBoard.getPiece(p) != null) {
+			if(this.ParentBoard.getPiece(p).side == this.side) {
+				return false;
+			}
+		}
+		return false;
+	}
+	public boolean collisionAt(Position p) { //Returns true if piece is null, false if friend or enemy piece
 		if(this.ParentBoard.getPiece(p) != null) {
 			return true;
 		}
