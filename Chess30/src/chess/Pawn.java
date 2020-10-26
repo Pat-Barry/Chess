@@ -45,6 +45,10 @@ public class Pawn extends Piece {
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws Exception {
 		
+		
+		if(promotion == null) {
+			promotion = new Queen(this.side);
+		}
 	//	System.out.println("We are being asked to move");
 		
 		Position capture = newpos;

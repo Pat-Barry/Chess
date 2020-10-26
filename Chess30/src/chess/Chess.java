@@ -7,6 +7,7 @@ public class Chess {
 	
 	static int turn = 0;
 	static boolean drawRequest = false;
+	public static int drawItt = -1;
 	public static int gameItteration;
 	
 	public static Board CurrentBoard;
@@ -56,7 +57,12 @@ public class Chess {
 				//System.out.println("35");
 				//CurrentBoard.layout[Input.start_i][Input.start_i].moveTo(new Position(Input.end_j, Input.end_i), Input.promotion);
 				System.out.println("Moving "+Input.start_j+" "+  Input.start_i+" to "+Input.end_j+" "+Input.end_i+" on turn "+turn);
-				CurrentBoard.movePiece(new Position(Input.start_j,  Input.start_i), new Position(Input.end_j, Input.end_i), Input.promotion, turn);
+				int cm = CurrentBoard.movePiece(new Position(Input.start_j,  Input.start_i), new Position(Input.end_j, Input.end_i), Input.promotion, turn);
+				if(cm == 1) {
+					System.out.println("Check");
+				} else if(cm == 2) {
+					System.out.println("Checkmate");
+				}
 			}
 			catch(Exception e) {
 				System.out.println("Illegal move, try again");
@@ -92,9 +98,7 @@ public class Chess {
 				return i;
 			}
 		}
-		
 		return -1;
-		
 	}
 	
 	public static void askForInput() throws Exception{
@@ -172,7 +176,7 @@ public class Chess {
 		}
 		
 		if (s.equals("draw")) {
-			if (drawRequest) {
+			if (drawRequest && (drawItt + 1 == CurrentBoard.gameItteration)) {
 				CurrentBoard.state = -2;
 				return;
 			}
@@ -212,10 +216,20 @@ public class Chess {
 		
 		
 		if (s.length() == 7) {// Regular Move + Promotion
+			if(turn == 1) {
+				if(Input.end_i != 0) {
+					throw new Exception("Cannot request promotion if black isn't moving to x1");
+				} 
+			} else if(turn == 0) {
+				if(Input.end_i != 7) {
+					throw new Exception("Cannot request promotion if white isn't moving to x8");
+				}
+			}
 			Input.promotion = charToPiece(s.charAt(6));
 			return;
 		}//Regular Move + Draw;
 		drawRequest = true;
+		drawItt = CurrentBoard.gameItteration;
 		
 		
 		

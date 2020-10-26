@@ -3,7 +3,6 @@ public class Bishop extends Piece{
 
 	public Bishop(int i, int x, int y, Board ParentBoard) {
 		super(i, x, y, ParentBoard);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Bishop(int i) {
