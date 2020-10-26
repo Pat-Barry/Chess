@@ -3,6 +3,8 @@ import java.util.Scanner;
 
 public class Chess {
 	
+	static boolean castle = false;
+	
 	static int turn = 0;
 	static boolean drawRequest = false;
 	public static int gameItteration;
@@ -41,6 +43,15 @@ public class Chess {
 				System.out.println("draw");
 				break;
 			}
+			if (CurrentBoard.state == 0) {
+				System.out.println("White wins");
+				break;
+			}
+			
+			if (CurrentBoard.state == 1) {
+				System.out.println("Black wins");
+				break;
+			}
 			try {
 				//System.out.println("35");
 				//CurrentBoard.layout[Input.start_i][Input.start_i].moveTo(new Position(Input.end_j, Input.end_i), Input.promotion);
@@ -66,7 +77,8 @@ public class Chess {
 				break;
 			}
 			if(turn == 1) { turn = 0; } else { turn = 1; }
-			CurrentBoard.gameItteration++;
+			//CurrentBoard.gameItteration++; Doing this when movePiece confirmed
+			
 			
 			CurrentBoard.verifyPosIntegrity();
 		}
@@ -169,9 +181,11 @@ public class Chess {
 		}
 		if (s.length() == 6) { // Resign
 			if (turn == 0) {
+				System.out.println("RESIGN 0");
 				CurrentBoard.state = 1;
 			}
 			else {
+				System.out.println("RESIGN 1");
 				CurrentBoard.state = 0;
 			}
 			return;

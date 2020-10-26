@@ -18,6 +18,7 @@ public class Board implements Serializable {
 		state = -1;
 		gameItteration = 0;
 		
+		/*
 		new Pawn(0).setBoard(0, 1, this);
 		new Pawn(0).setBoard(1, 1, this);
 		new Pawn(0).setBoard(2, 1, this);
@@ -52,6 +53,44 @@ public class Board implements Serializable {
 		new Bishop(1).setBoard(5, 7, this);
 		new Knight(1).setBoard(6, 7, this);
 		new Rook(1).setBoard(7, 7, this);
+		*/
+		
+		/*
+bR bN bB ##    ##    bK  8
+## bp bp    ## bp ##     7
+bp ##    ##    ##    ##  6
+##    ##    ##    bp     5
+wQ bB    ## bN ##    wp  4
+wN    ##    bp    ##     3
+wp ##    ## wp wp    ##  2
+wK    wB bR ##    wN wR  1
+ a  b  c  d  e  f  g  h
+
+		 */
+		King kK = new King(1); kK.setBoard(7,7, this); kK.hasMoved = true;
+		Pawn pC = new Pawn(1); pC.setBoard(6, 4, this); pC.hasMoved = true;
+		Pawn pD = new Pawn(0); pD.setBoard(7, 3, this); pD.hasMoved = true;
+		
+		new Knight(0).setBoard(6, 0, this);
+		new Rook(0).setBoard(7, 0, this);
+		
+		new Pawn(1).setBoard(5, 6, this);
+		new Knight(1).setBoard(4, 3, this);
+		Pawn pB = new Pawn(1); pB.setBoard(4, 2, this); pB.hasMoved = true;
+		new Pawn(0).setBoard(4, 1, this); new Pawn(0).setBoard(5, 1, this);
+		Rook rR = new Rook(1); rR.setBoard(3, 0, this); rR.hasMoved = true;
+		
+		new Rook(1).setBoard(0, 7, this); new Knight(1).setBoard(1, 7, this); new Bishop(1).setBoard(2, 7, this);
+		new Pawn(1).setBoard(1, 6, this); new Pawn(1).setBoard(2, 6, this);
+		Pawn pA = new Pawn(1); pA.setBoard(0, 5, this); pA.hasMoved = true;
+		new Knight(0).setBoard(0,2, this); 
+		new Queen(0).setBoard(0, 3, this); new Bishop(1).setBoard(1,3, this);
+		new Pawn(0).setBoard(0, 1, this);
+		King k = new King(0); k.setBoard(0,0, this); k.hasMoved = true;
+		new Bishop(0).setBoard(2,0, this);
+		
+		
+		
 		
 	}
 	
@@ -64,6 +103,9 @@ public class Board implements Serializable {
 					if(bc.layout[y][x].side != s) {
 						try { 
 							bc.layout[y][x].moveTo(TroubledKingPos, null);
+							if(Chess.castle) {
+								System.out.println("MOVE :" + x+","+y+" -> "+p.x+","+p.y);
+							}
 							return true;
 						} catch(Exception e) {
 							
@@ -104,6 +146,9 @@ public class Board implements Serializable {
 						try { 
 							//System.out.println("Trying move");
 							bc.layout[y][x].moveTo(TroubledKingPos, null);
+							if(Chess.castle) {
+								System.out.println("MOVE : "+x+","+y+" -> "+TroubledKingPos.x+","+TroubledKingPos.y);
+							}
 							return true;
 						} catch(Exception e) {
 							
@@ -161,6 +206,7 @@ public class Board implements Serializable {
 			if(this.KingIsChecked(ns)) {
 				System.out.println("ns is checked");
 				if(!this.KingCanRecover(ns)) {
+					System.out.println("CANNOT RECOVER THE COVER");
 					this.state = s;
 				}
 			}

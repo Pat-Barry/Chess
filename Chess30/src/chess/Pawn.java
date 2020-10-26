@@ -61,9 +61,13 @@ public class Pawn extends Piece {
 			
 		} else if(v.equals(-1, moveDirectionDelta) || v.equals(1, moveDirectionDelta)) {
 			if(!this.enemyAt(newpos) ) {
+				System.out.println("No enemy at newpos ");
 				if(this.isPassantPawnAt( newpos.addVector(0, -moveDirectionDelta) )){
+					System.out.println("FOUND PASS PAWN");
 					capture = newpos.addVector(0, -moveDirectionDelta);
 				} else {
+					Pawn pwn = (Pawn) ParentBoard.getPiece(newpos.addVector(0, -moveDirectionDelta));
+					System.out.println(ParentBoard.gameItteration+" "+pwn.passantItteration);
 					throw new Exception("Trying to move pawn diagonal where there is no piece, or passant pass");
 				}
 			} 
@@ -75,6 +79,8 @@ public class Pawn extends Piece {
 			if(this.collisionAt(newpos)) {
 				throw new Exception("Cannot pass 2, there is a piece 2 steps ahead");
 			}
+			System.out.println("Setting passant itteration "+ParentBoard.gameItteration);
+			this.passantItteration = ParentBoard.gameItteration;
 			
 		} else {
 			throw new Exception("Move vector does not match a legal move");
@@ -100,6 +106,9 @@ public class Pawn extends Piece {
 		//Board deepcopy = new Board().setToState(currentBoard)
 		
 		this.hasMoved = true;
+		if(!capture.equals(newpos)) {
+			System.out.println("capture not newpos");
+		}
 		ParentBoard.setPiece(capture, null);
 		ParentBoard.setPiece(this.pos, null);
 		if(newpos.y == this.promotion_bar) {
@@ -124,7 +133,7 @@ public class Pawn extends Piece {
 		if(ParentBoard.getPiece(p) instanceof Pawn) {
 			Pawn pwn = (Pawn) ParentBoard.getPiece(p);
 			if(pwn.side != this.side) {
-				if(pwn.passantItteration == Chess.gameItteration - 1) {
+				if(pwn.passantItteration == ParentBoard.gameItteration - 1) {
 					return true;
 				}
 			}

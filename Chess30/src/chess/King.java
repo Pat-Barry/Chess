@@ -37,6 +37,7 @@ public class King extends Piece {
 
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws Exception {
+		
 	//	System.out.println("This posx "+this.pos.x+" this posy "+this.pos.y);
 		Vector v = new Vector(newpos, this.pos);
 	//	System.out.println("King vector"+v);
@@ -48,16 +49,19 @@ public class King extends Piece {
 				Position step2 = pos.addVector(0, (newpos.x == 0 ? -2 : 2));
 				if(rk.side == this.side && rk.hasMoved == false) {
 					if(ParentBoard.noCollisions(pos, newpos)) {
+						Chess.castle = true;
 						if(ParentBoard.KingIsChecked(this.side) || ParentBoard.EnemyCanAttack(this.side, step1) || ParentBoard.EnemyCanAttack(this.side, step2)) {
 							
+							Chess.castle = false;
+							throw new Exception("For castling, king cannot be, move through, or end up, under attack");
+				
+						} else {
+							Chess.castle = false;
 							this.hasMoved = true;
 							rk.hasMoved = true;
 							
 							ParentBoard.setPiece(newpos, this);
-							ParentBoard.setPiece(newpos, rk);
-						
-						} else {
-							throw new Exception("For castling, king cannot be, move through, or end up, under attack");
+							ParentBoard.setPiece(pos, rk);
 						}
 					} else {
 						throw new Exception("Cannot be any pieces between King/Rook to do castle");
