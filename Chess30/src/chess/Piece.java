@@ -38,7 +38,7 @@ public abstract class Piece implements Serializable {
 
 	public abstract String getString();
 
-	public abstract void moveTo(Position newpos, Piece promotion) throws Exception;
+	public abstract void moveTo(Position newpos, Piece promotion) throws IllegalMoveException;
 	
 	
 	

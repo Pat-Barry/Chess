@@ -101,7 +101,7 @@ public class Chess {
 		return -1;
 	}
 	
-	public static void askForInput() throws Exception{
+	public static void askForInput() throws IllegalMoveException {
 		
 		
 		//System.out.println("IN ask for input");
@@ -130,11 +130,11 @@ public class Chess {
 			Position cpos = new Position(Input.start_j, Input.start_i);
 			Piece showMovePiece = CurrentBoard.getPiece(cpos);
 			if(showMovePiece == null) {
-				throw new Exception("There is no piece that can be tested here");
+				throw new IllegalMoveException("There is no piece that can be tested here");
 				
 			}
 			if(showMovePiece.side != turn) {
-				throw new Exception("Cannot look at other team's moves");
+				throw new IllegalMoveException("Cannot look at other team's moves");
 			}
 			if(showMovePiece instanceof Knight) {
 				System.out.println("have showmovepiece as knight");
@@ -158,7 +158,7 @@ public class Chess {
 						new Filler(0).setBoard(x, y, moveBoard);
 					//	System.out.println("we found a move on "+x+" and "+y);
 					} catch(Exception e) {
-						Exception ne = new Exception("Move cannot be done, King is checked");
+						Exception ne = new IllegalMoveException("Move cannot be done, King is checked");
 						if(ne.equals(e)) {
 							new Filler(1).setBoard(x, y, moveBoard);
 							//moveBoard.layout[y][x] = new Filler(1);
@@ -171,7 +171,7 @@ public class Chess {
 			moveBoard.render();
 			//boardClone.movePiece(newpos, np, new Queen(turn), turn);
 			
-			throw new Exception("Completed Checking Moves");
+			throw new IllegalMoveException("Completed Checking Moves");
 		//	return;
 		}
 		
@@ -181,7 +181,7 @@ public class Chess {
 				return;
 			}
 			
-			throw new Exception("requesting draw when is none");
+			throw new IllegalMoveException("requesting draw when is none");
 		}
 		if (s.length() == 6) { // Resign
 			if (turn == 0) {
@@ -200,11 +200,11 @@ public class Chess {
 		//System.out.println(Input.start_i + " and startj "+Input.start_j);
 		
 		if (CurrentBoard.layout[Input.start_i][Input.start_j] == null) {
-			throw new Exception("start spot is null");
+			throw new IllegalMoveException("start spot is null");
 		}
 		
 		if (CurrentBoard.layout[Input.start_i][Input.start_j].side != turn) {
-			throw new Exception("start side is not equal to turn");
+			throw new IllegalMoveException("start side is not equal to turn");
 		}
 		
 		Input.end_j = charToInt(s.charAt(3));
@@ -218,11 +218,11 @@ public class Chess {
 		if (s.length() == 7) {// Regular Move + Promotion
 			if(turn == 1) {
 				if(Input.end_i != 0) {
-					throw new Exception("Cannot request promotion if black isn't moving to x1");
+					throw new IllegalMoveException("Cannot request promotion if black isn't moving to x1");
 				} 
 			} else if(turn == 0) {
 				if(Input.end_i != 7) {
-					throw new Exception("Cannot request promotion if white isn't moving to x8");
+					throw new IllegalMoveException("Cannot request promotion if white isn't moving to x8");
 				}
 			}
 			Input.promotion = charToPiece(s.charAt(6));

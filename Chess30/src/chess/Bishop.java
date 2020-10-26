@@ -21,13 +21,13 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public void moveTo(Position newpos, Piece promotion) throws Exception {
+	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
 		// TODO Auto-generated method stub
 		Vector v = new Vector(newpos, this.pos);
 		if(v.variationOf(-1, 1)) {
 			if (this.ParentBoard.noCollisions(pos, newpos)) {
 				if (friendAt(newpos)) {
-					throw new Exception("Can't Friendly Fire");
+					throw new IllegalMoveException("Can't Friendly Fire");
 				}
 				
 				else {
@@ -36,11 +36,11 @@ public class Bishop extends Piece{
 				}
 			}
 			else {
-				throw new Exception("Collision Detected in Bishop movement");
+				throw new IllegalMoveException("Collision Detected in Bishop movement");
 			}
 		}
 		else {
-			throw new Exception("Vector is not in step shape");
+			throw new IllegalMoveException("Vector is not in step shape");
 		}
 	
 	}

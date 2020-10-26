@@ -22,12 +22,12 @@ public class Queen extends Piece{
 	}
 
 	@Override
-	public void moveTo(Position newpos, Piece promotion) throws Exception {
+	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
 		Vector v = new Vector(newpos, this.pos);
 		if(v.variationOf(-1, 1) || v.variationOf(0, 1)) {
 			if (this.ParentBoard.noCollisions(pos, newpos)) {
 				if (friendAt(newpos)) {
-					throw new Exception("Can't Friendly Fire");
+					throw new IllegalMoveException("Can't Friendly Fire");
 				}
 				
 				else {
@@ -36,11 +36,11 @@ public class Queen extends Piece{
 				}
 			}
 			else {
-				throw new Exception("Collision Detected in Queen movement");
+				throw new IllegalMoveException("Collision Detected in Queen movement");
 			}
 		}
 		else {
-			throw new Exception("Vector is not in step shape");
+			throw new IllegalMoveException("Vector is not in step shape");
 		}
 		
 	}

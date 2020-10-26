@@ -43,7 +43,7 @@ public class Pawn extends Piece {
 
 	
 	@Override
-	public void moveTo(Position newpos, Piece promotion) throws Exception {
+	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
 		
 		
 		if(promotion == null) {
@@ -59,7 +59,7 @@ public class Pawn extends Piece {
 		if(v.equals(0, moveDirectionDelta)) {
 	//	System.out.println("Vector is a match for 01");
 			if(this.collisionAt(newpos) ) {
-				throw new Exception("Cannot move pawn ahead, there is a collision");
+				throw new IllegalMoveException("Cannot move pawn ahead, there is a collision");
 			}
 		//	System.out.println("Passed if else 01");
 			
@@ -72,22 +72,22 @@ public class Pawn extends Piece {
 				} else {
 					Pawn pwn = (Pawn) ParentBoard.getPiece(newpos.addVector(0, -moveDirectionDelta));
 					System.out.println(ParentBoard.gameItteration+" "+pwn.passantItteration);
-					throw new Exception("Trying to move pawn diagonal where there is no piece, or passant pass");
+					throw new IllegalMoveException("Trying to move pawn diagonal where there is no piece, or passant pass");
 				}
 			} 
 			
 		} else if(v.equals(0, 2*moveDirectionDelta)) {
 			if(hasMoved) {
-				throw new Exception("Can only go 2 steps on first pawn move");
+				throw new IllegalMoveException("Can only go 2 steps on first pawn move");
 			}
 			if(this.collisionAt(newpos)) {
-				throw new Exception("Cannot pass 2, there is a piece 2 steps ahead");
+				throw new IllegalMoveException("Cannot pass 2, there is a piece 2 steps ahead");
 			}
 			System.out.println("Setting passant itteration "+ParentBoard.gameItteration);
 			this.passantItteration = ParentBoard.gameItteration;
 			
 		} else {
-			throw new Exception("Move vector does not match a legal move");
+			throw new IllegalMoveException("Move vector does not match a legal move");
 		}
 		
 		// here
@@ -97,10 +97,6 @@ public class Pawn extends Piece {
 			throw new Exception("Requestion promotion, when not moving to a end of the board");
 		}
 		*/
-		if(newpos.y == this.promotion_bar && promotion == null) {
-			//System.out.println("e2");
-			throw new Exception("Must request promotion upon reaching promotion bar");
-		}
 		
 		
 		
@@ -116,10 +112,6 @@ public class Pawn extends Piece {
 		ParentBoard.setPiece(capture, null);
 		ParentBoard.setPiece(this.pos, null);
 		if(newpos.y == this.promotion_bar) {
-			if(promotion == null) {
-				//System.out.println("Null promo");
-				throw new IllegalArgumentException("No promotion converted");
-			}
 			//System.out.println("new queen");
 			//ParentBoard.setPiece(newpos, promotion);
 			promotion.setBoard(newpos.x, newpos.y, ParentBoard);

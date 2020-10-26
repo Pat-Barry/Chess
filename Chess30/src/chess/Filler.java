@@ -18,9 +18,9 @@ public class Filler extends Piece {
 	}
 
 	@Override
-	public void moveTo(Position newpos, Piece promotion) throws Exception {
+	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
 		// TODO Auto-generated method stub
-		throw new Exception();
+		throw new IllegalMoveException();
 		
 	}
 
