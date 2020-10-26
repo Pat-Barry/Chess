@@ -18,7 +18,7 @@ public class Board implements Serializable {
 		state = -1;
 		gameItteration = 0;
 		
-		/*
+		
 		new Pawn(0).setBoard(0, 1, this);
 		new Pawn(0).setBoard(1, 1, this);
 		new Pawn(0).setBoard(2, 1, this);
@@ -53,7 +53,7 @@ public class Board implements Serializable {
 		new Bishop(1).setBoard(5, 7, this);
 		new Knight(1).setBoard(6, 7, this);
 		new Rook(1).setBoard(7, 7, this);
-		*/
+		
 		
 		/*
 bR bN bB ##    ##    bK  8
@@ -67,6 +67,7 @@ wK    wB bR ##    wN wR  1
  a  b  c  d  e  f  g  h
 
 		 */
+		/*
 		King kK = new King(1); kK.setBoard(7,7, this); kK.hasMoved = true;
 		Pawn pC = new Pawn(1); pC.setBoard(6, 4, this); pC.hasMoved = true;
 		Pawn pD = new Pawn(0); pD.setBoard(7, 3, this); pD.hasMoved = true;
@@ -89,8 +90,7 @@ wK    wB bR ##    wN wR  1
 		King k = new King(0); k.setBoard(0,0, this); k.hasMoved = true;
 		new Bishop(0).setBoard(2,0, this);
 		
-		
-		
+		*/
 		
 	}
 	

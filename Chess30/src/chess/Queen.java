@@ -1,7 +1,20 @@
 package chess;
+/**
+ * Queen Object
+ *  
+ *  A <code>Queen</code> object contains the parameters and functionality
+ *  for the Queen piece
+ *
+ */
 
 public class Queen extends Piece{
-
+	/**
+	 * First Constructor for the Queen class
+	 * @param i - Player turn
+	 * @param x - Coordinate x on the board
+	 * @param y - Coordinate y on the board
+	 * @param ParentBoard
+	 */
 	public Queen(int i, int x, int y, Board ParentBoard) {
 		super(i, x, y, ParentBoard);
 		// TODO Auto-generated constructor stub
