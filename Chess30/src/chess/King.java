@@ -1,25 +1,20 @@
 package chess;
+/**
+ * Queen Object
+ *  
+ *  A <code>King</code> object contains the parameters and functionality
+ *  for the Queen piece
+ *
+ */
 
 public class King extends Piece {
 
-	boolean hasMoved;
+	boolean hasMoved = false;
 	int castleBar;
-	public King(int s, int x, int y, Board ParentBoard) {
-		super(s, x, y, ParentBoard);
-		// TODO Auto-generated constructor stub
-		this.hasMoved = false;
-		if(s == 0) {
-			this.castleBar = 0;
-		} else {
-			this.castleBar = 7;
-		}
-	}
 	
-	public King(int i) {
-		super(i);
-		this.side = i;
-		this.hasMoved = false;
-		if(i == 0) {
+	public King(int s) {
+		super(s);
+		if(s == 0) {
 			this.castleBar = 0;
 		} else {
 			this.castleBar = 7;

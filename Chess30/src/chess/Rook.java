@@ -2,16 +2,10 @@ package chess;
 
 public class Rook extends Piece {
 
-	boolean hasMoved;
-	public Rook(int s, int x, int y, Board ParentBoard) {
-		super(s, x, y, ParentBoard);
-		this.hasMoved = false;
-	}
+	boolean hasMoved = false;
 	
-	public Rook(int i) {
-		super(i);
-		this.side = i;
-		this.hasMoved = false;
+	public Rook(int s) {
+		super(s);
 	}
 
 	@Override
