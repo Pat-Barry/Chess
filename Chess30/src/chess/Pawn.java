@@ -1,5 +1,12 @@
 package chess;
-
+/**
+ * Pawn Object
+ * 
+ * A <code>Pawn</code> object contains the parameters and functionality
+ *  for the Pawn piece
+ * @author PatrickBarry
+ *
+ */
 
 public class Pawn extends Piece {
 
@@ -19,6 +26,10 @@ public class Pawn extends Piece {
 		}
 	}
 	
+	/**
+	 * Constructor for the Pawn Class
+	 * @param i - Player turn
+	 */
 	public Pawn(int i) {
 		super(i);
 		this.side = i;
@@ -31,7 +42,11 @@ public class Pawn extends Piece {
 			moveDirectionDelta = -1;
 		}
 	}
-
+	
+	/**
+	 * getString Method
+	 * @return bP - If black Pawn.
+	 */
 	@Override
 	public String getString() {
 		if(this.side == 0) {

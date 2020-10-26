@@ -4,27 +4,29 @@ package chess;
  *  
  *  A <code>Queen</code> object contains the parameters and functionality
  *  for the Queen piece
- *
+ *  @author PatrickBarry
  */
 
 public class Queen extends Piece{
-	/**
-	 * First Constructor for the Queen class
-	 * @param i - Player turn
-	 * @param x - Coordinate x on the board
-	 * @param y - Coordinate y on the board
-	 * @param ParentBoard
-	 */
+	
 	public Queen(int i, int x, int y, Board ParentBoard) {
 		super(i, x, y, ParentBoard);
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * Constructor for the Queen class
+	 * @param i - Player turn
+	 */
 	public Queen(int i) {
 		super(i);
 		this.side = i;
 	}
 
+	/**
+	 * getString Method
+	 * @return bQ - If black Queen. wQ - If white Queen.
+	 */
 	@Override
 	public String getString() {
 		if(side == 1) {
@@ -33,7 +35,15 @@ public class Queen extends Piece{
 			return "wQ";
 		}
 	}
-
+	
+	/**
+	 * moveTo Method
+	 * @param newpos - New position
+	 * @param promotion - Promoted piece
+	 * @throws Exception - If new position has a friendly piece
+	 * @throws Exception - If collision detected during Queen movement
+	 * @throws Exception - If new position is not a legal move for Queen
+	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws Exception {
 		Vector v = new Vector(newpos, this.pos);

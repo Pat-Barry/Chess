@@ -7,19 +7,13 @@ package chess;
  *  @author PatrickBarry
  */
 public class Knight extends Piece{
-	/**
-	 * First constructor for the knight class
-	 * @param i - Player turn
-	 * @param x - Coordinate x on board
-	 * @param y - Coordinate y on board
-	 * @param ParentBoard
-	 */
+	
 	public Knight(int i, int x, int y, Board ParentBoard) {
 		super(i, x, y, ParentBoard);
 		
 	}
 	/**
-	 * Second Constructor for the Knight Class
+	 * Constructor for the Knight Class
 	 * @param i - Player turn
 	 */
 	public Knight(int i) {
@@ -28,8 +22,7 @@ public class Knight extends Piece{
 	}
 	/**
 	 * getString Method
-	 * @return bN - If black knight
-	 * @return wN - If white knight
+	 * @return bN - If black knight. wN - If white knight.
 	 */
 	@Override
 	public String getString() {
@@ -43,7 +36,7 @@ public class Knight extends Piece{
 	/**
 	 * moveTo Method
 	 * @param newpos - New position
-	 * @param promotion - Promoted Piece
+	 * @param promotion - Promoted piece
 	 * @throws Exception - If new position has a friendly piece
 	 * @throws Exception - If new position is not a legal move for Knight
 	 */
