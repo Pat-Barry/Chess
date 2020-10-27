@@ -1,9 +1,9 @@
 package chess;
 /**
- * Queen Object
+ * King Object
  *  
  *  A <code>King</code> object contains the parameters and functionality
- *  for the Queen piece
+ *  for the King piece
  *
  */
 
@@ -12,6 +12,10 @@ public class King extends Piece {
 	boolean hasMoved = false;
 	int castleBar;
 	
+	/**
+	 * Constructor for the King class
+	 * @param s - Player turn
+	 */
 	public King(int s) {
 		super(s);
 		if(s == 0) {
@@ -20,7 +24,11 @@ public class King extends Piece {
 			this.castleBar = 7;
 		}
 	}
-
+	
+	/**
+	 * getString Method
+	 * @return bK - If black King. wK - If white King.
+	 */
 	@Override
 	public String getString() {
 		if(side == 1) {
@@ -30,6 +38,17 @@ public class King extends Piece {
 		}
 	}
 
+	/**
+	 * moveTo Method
+	 * @param newpos - New position
+	 * @param promotion - Promoted Piece
+	 * @throws IllegalMoveException - For castling, king cannot be, move through, or end up, under attack
+	 * @throws IllegalMoveException - Cannot be any pieces between King/Rook to do castle
+	 * @throws IllegalMoveException - Rook must (1) not have moved and (2) be on same team
+	 * @throws IllegalMoveException - Cannot castle with non-rook piece
+	 * @throws IllegalMoveException - Cannot move King to same-team piece
+	 * @throws IllegalMoveException - Move Vector not allowed
+	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
 		
@@ -79,7 +98,7 @@ public class King extends Piece {
 			ParentBoard.setPiece(newpos, this);
 			ParentBoard.setPiece(pos, null);
 		} else {
-			throw new IllegalMoveException("Vector is not in step shape set");
+			throw new IllegalMoveException("Move Vector not allowed");
 		}
 	}
 

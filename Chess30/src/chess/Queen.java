@@ -36,9 +36,9 @@ public class Queen extends Piece{
 	 * moveTo Method
 	 * @param newpos - New position
 	 * @param promotion - Promoted piece
-	 * @throws IllegalMoveException - If new position has a friendly piece
-	 * @throws IllegalMoveException - If collision detected during Queen movement
-	 * @throws IllegalMoveException - If new position is not a legal move for Queen
+	 * @throws IllegalMoveException - Can't Friendly Fire
+	 * @throws IllegalMoveException - Collision Detected in Queen movement
+	 * @throws IllegalMoveException - Move Vector not allowed
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
@@ -59,7 +59,7 @@ public class Queen extends Piece{
 			}
 		}
 		else {
-			throw new IllegalMoveException("Vector is not in step shape");
+			throw new IllegalMoveException("Move Vector not allowed");
 		}
 		
 	}

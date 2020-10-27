@@ -33,8 +33,8 @@ public class Knight extends Piece{
 	 * moveTo Method
 	 * @param newpos - New position
 	 * @param promotion - Promoted piece
-	 * @throws IllegalMoveException - If new position has a friendly piece
-	 * @throws IllegalMoveException - If new position is not a legal move for Knight
+	 * @throws IllegalMoveException - Fiendly Fire for Knight
+	 * @throws IllegalMoveException - Move Vector not allowed
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
@@ -51,7 +51,7 @@ public class Knight extends Piece{
 			}
 		}
 		else {
-			throw new IllegalMoveException("Vector not in step shape");
+			throw new IllegalMoveException("Move Vector not allowed");
 		}
 		
 	}
