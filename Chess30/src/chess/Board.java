@@ -1,3 +1,5 @@
+
+
 package chess;
 
 import java.io.ByteArrayInputStream;
@@ -15,11 +17,25 @@ import pieces.Pawn;
 import pieces.Queen;
 import pieces.Rook;
 
+/**
+ * @author Patrick Barry and Philip Murray
+ * 
+ * Board Object
+ *  
+ *  The <code>Board</code> class represents a chessboard, containing the 8 x 8 grid which stores pieces.
+ * 
+ * 
+ *
+ */
 public class Board implements Serializable {
 	public Piece[][] layout;
 	public String[][] stringBoard;
 	public int state;
 	public int gameItteration;
+	
+	/**
+	 * Constructor of the Board class. Returns a new chess Board with a new set of chess pieces in their starting position. 
+	 */
 	
 	public Board() {
 		layout = new Piece[8][8];
@@ -65,6 +81,41 @@ public class Board implements Serializable {
 		
 	}
 	
+	/**
+	 * getCopy Method
+	 * Creates a copy of this board. Used when testing if moving a piece results in or maintains a checked state.
+	 * 
+	 * @param p1 - Start position on this Board. 
+	 * @param p2 - End position on this Board.
+	 */
+	public Board getCopy() {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(this);
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ObjectInputStream ois = new ObjectInputStream(bais);
+			return (Board) ois.readObject();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Serialization Clone Failed");
+		}
+	}
+	
+	
+	/**
+	 * EnemyCanAttackMethod
+	 * This method determines if the enemy side can capture at a specific position on the Board.
+	 * Used to inspect the two spaces which the King travels when castling. 
+	 * 
+	 * For each piece of the side s's opponent, it is tested if it can be called to move to position p.
+	 * If such piece exists, this method returns true.
+	 * 
+	 * @param s - The side (0: white, 1: black) in question
+	 * @param p - The position that the opponent of side s may capture
+	 * @return true - if the opponent of side s can capture at position p. false - If the opponent cannot capture at position p.
+	 */
 	public boolean EnemyCanAttack(int s, Position p) {
 		Board bc = this.getCopy();
 		Position TroubledKingPos = p;
@@ -85,9 +136,17 @@ public class Board implements Serializable {
 		return false;
 	}
 	
-	public boolean KingIsChecked(int s) { // this.KingIsChecked() checks if team S is checked on "this" board.
-		                                  // First, it makes a clone of "this" board to test.
-										  // Second, it checks if there exists a move from !S -> S_King. If there exists 1, it returns true. 
+	/**
+	 * KingIsChecked
+	 * This method determines if the King of side s is checked.
+	 * For each piece of the side s's opponent, it is tested if it can be called to move to the King's piece.
+	 * If such piece exists, this method returns true. 
+	 * 
+	 * @param s - The side (0: white, 1: black) of the King
+	 * @return true - if the opponent of side s can capture at the s's King. false - If the opponent cannot capture the King.
+	 */
+	public boolean KingIsChecked(int s) {
+		                         
 		Board bc = this.getCopy();
 		Position TroubledKingPos = new Position(-1,-1);
 		for(int y=0; y < 8; y++) {
@@ -117,29 +176,80 @@ public class Board implements Serializable {
 		return false;
 	}
 	
-	public int movePiece(Position p, Position np, Piece prom, int s) throws Exception { 
+	/**
+	 * KingCanRecover
+	 * This method determines if side s's King can recover from a Checked state.
+	 * For every piece the King has, for every spot on the board, the movePiece method is called to move the Piece to that spot.
+	 * If there exists a valid move (no IllegalMoveException is thrown by the movePiece method), then this method returns true.
+	 * 
+	 * @param s - The side (0: white, 1: black) of the King
+	 * @return true - if side s is in Checkmate state. false - if side s is in Checkmate state.
+	 */
+	public boolean KingCanRecover(int s) {
+		
+		Board rb = this.getCopy();
+		for(int y=0; y < 8; y++) {
+			for(int x=0; x < 8; x++) {
+				if(rb.layout[y][x] != null) {
+					if(rb.layout[y][x].side == s) {
+						for(int b=0; b < 8; b++) {
+							for(int a=0; a < 8; a++) {
+								try {
+									rb.movePiece(rb.layout[y][x].pos, new Position(a, b), new Queen(s), s); 
+									return true;
+								} catch(Exception e) {
+									// That didn't fix the problem, so let's check the next move
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	
+	/**
+	 * movePiece Method
+	 * This method is responsible enacting a player's move by calling for the piece at position p to move to position np. 
+	 * It conducts some initial legality checks, then it clones this instance of chess Board, requests for the piece to move from p to np.
+	 * The piece may throw an IllegalMoveException. After the piece is moved, the piece's King is checked to not be in a Checked state.
+	 * An IllegalMoveException is thrown if the King is found to be in a Checked state.
+	 * The piece's moves are then applied to this instance of the Board. 
+	 * 
+	 * KingIsChecked is called to determine if the opponent's King is now Checked.
+	 * If opponent is Checked, KingCanRecover is called to determine if the opponent is in a Checkmate state.
+	 * If opponent in Checkmate, this instance of the Board's state is set to the winning side's team ID (0 or 1). 
+	 * 
+	 * 
+	 * @param p - Position of a player's piece
+	 * @param np - Position the player is attempting to move their piece to
+	 * @param prom - Piece that is the optional promotion parameter for Pawn cases
+	 * @param s - The side (0: white, 1: black) of the player
+	 * @return 0 - if the player's opponent is not Checked. 1 - the opponent's player is Checked. 2 - the opponent's player is in a Checkmate state.
+	 */
+	public int movePiece(Position p, Position np, Piece prom, int s) throws IllegalMoveException { 
 
 		if(this.getPiece(p) == null) {
-			throw new Exception("No piece located at p");
+			throw new IllegalMoveException("No piece located at p");
 		}
 		if(this.getPiece(p).side != s) {
-			throw new Exception("Piece at p is not from team "+s);
+			throw new IllegalMoveException("Piece at p is not from team "+s);
 		}
 		try {
 			Board boardclone = this.getCopy();
-			boardclone.getPiece(p).moveTo(np, prom); // This call throws exception if illegal move EXCEPT for check checking
+			boardclone.getPiece(p).moveTo(np, prom);
 			boardclone.updatePos();
 			boardclone.gameItteration++;
 			
-			//System.out.println("Before King is Checked for Checked");
-			
-			if(boardclone.KingIsChecked(s)) { // This call throws exception if the previous call was found to check the King
-				throw new Exception("Move cannot be done, King is checked");
+			if(boardclone.KingIsChecked(s)) {
+				throw new IllegalMoveException("Move cannot be done, King is (or still is) checked");
 			}
-			
-			//System.out.println("After king is checked for check");
-
-			this.getPiece(p).moveTo(np, prom); // Run the move, if it (1) is okay with moveTo and (2) doesn't cause KingIsChecked
+	
+			this.getPiece(p).moveTo(np, prom); 
 			this.updatePos();
 			this.gameItteration++;
 			
@@ -154,40 +264,16 @@ public class Board implements Serializable {
 			}
 			return 0;
 			
-		} catch(Exception e) {
-			throw new Exception(e);
+		} catch(IllegalMoveException e) {
+			throw e;
 		}
 	}
 	
-	public boolean KingCanRecover(int s) {
-		
-		/* Creates a clone of the 'this' board rc. 
-		 * Uses the public-API movePiece to, for every S_Piece on the board, see if there exists a move S_Piece -> Spot such that there is no longer a check.
-		 * If the move does not exist, the king cannot recover. 
-		 */
-		
-		Board rb = this.getCopy();
-		for(int y=0; y < 8; y++) {
-			for(int x=0; x < 8; x++) {
-				if(rb.layout[y][x] != null) {
-					if(rb.layout[y][x].side == s) {
-						for(int b=0; b < 8; b++) {
-							for(int a=0; a < 8; a++) {
-								try {
-									rb.movePiece(rb.layout[y][x].pos, new Position(a, b), new Queen(s), s); // Found a move, where after the move, King is not checked
-									return true;
-								} catch(Exception e) {
-									// That didn't fix the problem, so let's check the next move
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return false;
-	}
-
+	/**
+	 * updatePos Method
+	 * This method is responsible for updating the position of each Piece on this Board after the moveTo method is called. 
+	 * This ensures that the internal Position of the Piece moved always matches the indexical position of this Board's layout which references it. 
+	 */
 	void updatePos() {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) { 
@@ -198,23 +284,35 @@ public class Board implements Serializable {
 		}
 	}
 	
+	/**
+	 * getPiece Method
+	 * Responsible for updating the position member of each Piece after the moveTo method is called, to match that of this Board's Piece layout. 
+	 * This ensures that the internal Position of the Piece moved is always updated. 
+	 * 
+	 */
 	public Piece getPiece(Position p) {
 		return this.layout[p.y][p.x];
 	}
+	
+	/**
+	 * setPiece Method
+	 * Responsible for setting the setting the positional index p of this Board's layout to be a reference to Piece pic.
+	 * 
+	 * @param p   - Positional index of this Board's layout. 
+	 * @param pic - Piece of this method updates this Board's layout at p to reference.  
+	 */
 	public void setPiece(Position p, Piece pic) {
 		layout[p.y][p.x] = pic; 
 	}
 	
-	public boolean sameTeam(Position a, Position b) {
-		if(getPiece(a) != null) {
-			if(getPiece(b) != null) {
-				if(getPiece(a).side == getPiece(b).side) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+	
+	/**
+	 * noCollisions Method
+	 * Determines if there are no pieces located between two linearly separated positions on the board.
+	 * 
+	 * @param p1 - Start position on this Board. 
+	 * @param p2 - End position on this Board.
+	 */
 	public boolean noCollisions(Position p1, Position p2) {
 		Vector sv = (new Vector(p2, p1)).UnitStepVector(); //for(int x = p2.x - sv.x, y = p2.y - sv.y; p1.equals(x,y) == false; x = x - sv.x, y = y - sv.y) {
 		for(Position i = new Position(p2.x - sv.x, p2.y - sv.y); p1.equals(i) == false; i = new Position(i.x - sv.x, i.y - sv.y)) {
@@ -226,9 +324,15 @@ public class Board implements Serializable {
 	}
 
 	
+	
+	
+	/**
+	 * render Method
+	 * Prints this board as an ASCII representation in the console
+	 */
 	void render() {
-		for (int i = 0; i < 8; i++) { // i = 1 - 8
-			for (int j = 0; j < 8; j++) { // j = a -h
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				if (layout[i][j] == null) {
 					if (i % 2 != 0) {
 						if (j % 2 != 0) {
@@ -272,19 +376,5 @@ public class Board implements Serializable {
 		System.out.println();
 	}	
 	
-	public Board getCopy() {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(baos);
-			oos.writeObject(this);
-			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-			ObjectInputStream ois = new ObjectInputStream(bais);
-			return (Board) ois.readObject();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Serialization Clone Failed");
-		}
-	}
 }
 

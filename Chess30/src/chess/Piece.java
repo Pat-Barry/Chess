@@ -29,7 +29,7 @@ public abstract class Piece implements Serializable {
 	
 	/**
 	 * First setBoard Method
-	 * @param ParentBoard
+	 * @param ParentBoard - Board that the chess piece is stored in
 	 * @return this - Returns ParentBoard
 	 */
 	public Piece setBoard(Board ParentBoard) {
