@@ -8,10 +8,6 @@ package chess;
  */
 public class Knight extends Piece{
 	
-	public Knight(int i, int x, int y, Board ParentBoard) {
-		super(i, x, y, ParentBoard);
-		
-	}
 	/**
 	 * Constructor for the Knight Class
 	 * @param i - Player turn
@@ -37,8 +33,8 @@ public class Knight extends Piece{
 	 * moveTo Method
 	 * @param newpos - New position
 	 * @param promotion - Promoted piece
-	 * @throws Exception - If new position has a friendly piece
-	 * @throws Exception - If new position is not a legal move for Knight
+	 * @throws IllegalMoveException - If new position has a friendly piece
+	 * @throws IllegalMoveException - If new position is not a legal move for Knight
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {

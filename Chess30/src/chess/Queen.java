@@ -9,10 +9,6 @@ package chess;
 
 public class Queen extends Piece{
 	
-	public Queen(int i, int x, int y, Board ParentBoard) {
-		super(i, x, y, ParentBoard);
-		// TODO Auto-generated constructor stub
-	}
 	
 	/**
 	 * Constructor for the Queen class
@@ -40,9 +36,9 @@ public class Queen extends Piece{
 	 * moveTo Method
 	 * @param newpos - New position
 	 * @param promotion - Promoted piece
-	 * @throws Exception - If new position has a friendly piece
-	 * @throws Exception - If collision detected during Queen movement
-	 * @throws Exception - If new position is not a legal move for Queen
+	 * @throws IllegalMoveException - If new position has a friendly piece
+	 * @throws IllegalMoveException - If collision detected during Queen movement
+	 * @throws IllegalMoveException - If new position is not a legal move for Queen
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {

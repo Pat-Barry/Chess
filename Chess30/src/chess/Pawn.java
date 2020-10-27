@@ -15,26 +15,13 @@ public class Pawn extends Piece {
 	boolean hasMoved = false;
 	int passantItteration = -1;
 	
+	/**
+	 * Constructor for the 
+	 * @param s - Player turn
+	 */
 	public Pawn(int s) {
 		super(s);
 		if(s == 0) {
-			promotion_bar = 7;
-			moveDirectionDelta = 1;
-		} else {
-			promotion_bar = 0;
-			moveDirectionDelta = -1;
-		}
-	}
-	
-	/**
-	 * Constructor for the Pawn Class
-	 * @param i - Player turn
-	 */
-	public Pawn(int i) {
-		super(i);
-		this.side = i;
-		this.hasMoved = false;
-		if(i == 0) {
 			promotion_bar = 7;
 			moveDirectionDelta = 1;
 		} else {

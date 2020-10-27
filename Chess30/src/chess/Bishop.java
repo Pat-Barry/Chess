@@ -9,9 +9,6 @@ package chess;
  */
 public class Bishop extends Piece{
 	
-	public Bishop(int i, int x, int y, Board ParentBoard) {
-		super(i, x, y, ParentBoard);
-	}
 	
 	/**
 	 * Constructor for the Bishop Class
@@ -40,9 +37,9 @@ public class Bishop extends Piece{
 	 * moveTo Method
 	 * @param newpos - New position
 	 * @param promotion - Promoted piece
-	 * @throws Exception - If new position has a friendly piece
-	 * @throws Exception - If collision detected during Bishop movement
-	 * @throws Exception - If new position is not a legal move for Bishop
+	 * @throws IllegalMoveException - If new position has a friendly piece
+	 * @throws IllegalMoveException - If collision detected during Bishop movement
+	 * @throws IllegalMoveException - If new position is not a legal move for Bishop
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {

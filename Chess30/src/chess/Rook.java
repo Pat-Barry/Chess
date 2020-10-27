@@ -12,11 +12,6 @@ public class Rook extends Piece {
 
 	boolean hasMoved = false;
 	
-	public Rook(int s, int x, int y, Board ParentBoard) {
-		super(s, x, y, ParentBoard);
-		this.hasMoved = false;
-	}
-	
 	/**
 	 * Constructor for the Rook class
 	 * @param i - Player turn
@@ -42,9 +37,9 @@ public class Rook extends Piece {
 	 * moveTo Method
 	 * @param newpos - New position
 	 * @param promotion - Promoted piece
-	 * @throws Exception - If new position has a friendly piece
-	 * @throws Exception - If collision detected during Rook movement
-	 * @throws Exception - If new position is not a legal move for Rook
+	 * @throws IllegalMoveException - If new position has a friendly piece
+	 * @throws IllegalMoveException - If collision detected during Rook movement
+	 * @throws IllegalMoveException - If new position is not a legal move for Rook
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
