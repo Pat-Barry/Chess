@@ -2,12 +2,14 @@ package chess;
 
 import java.io.Serializable;
 
+import geometry.Position;
+
 public abstract class Piece implements Serializable {
 	
-	Board ParentBoard;
+	public Board ParentBoard;
 	
-	int side;
-	Position pos;
+	public int side;
+	public Position pos;
 	
 	
 	public Piece(int i, int x, int y, Board ParentBoard) {

@@ -1,4 +1,4 @@
-package chess;
+package geometry;
 
 /**
  * Vector Object
@@ -9,8 +9,8 @@ package chess;
  *
  */
 public class Vector {
-	int x;
-	int y;
+	public int x;
+	public int y;
 	
 	/**
 	 * First constructor for vector. Creates a vector with the given x and y components.

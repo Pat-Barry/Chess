@@ -1,4 +1,11 @@
-package chess;
+package pieces;
+
+import chess.Chess;
+import chess.IllegalMoveException;
+import chess.Piece;
+import geometry.Position;
+import geometry.Vector;
+
 /**
  * King Object
  *  
@@ -63,14 +70,11 @@ public class King extends Piece {
 				Position step2 = pos.addVector(0, (newpos.x == 0 ? -2 : 2));
 				if(rk.side == this.side && rk.hasMoved == false) {
 					if(ParentBoard.noCollisions(pos, newpos)) {
-						Chess.castle = true;
 						if(ParentBoard.KingIsChecked(this.side) || ParentBoard.EnemyCanAttack(this.side, step1) || ParentBoard.EnemyCanAttack(this.side, step2)) {
 							
-							Chess.castle = false;
 							throw new IllegalMoveException("For castling, king cannot be, move through, or end up, under attack");
 				
 						} else {
-							Chess.castle = false;
 							this.hasMoved = true;
 							rk.hasMoved = true;
 							

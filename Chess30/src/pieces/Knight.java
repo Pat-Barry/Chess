@@ -1,4 +1,10 @@
-package chess;
+package pieces;
+
+import chess.IllegalMoveException;
+import chess.Piece;
+import geometry.Position;
+import geometry.Vector;
+
 /**
  *  Knight Object
  *  

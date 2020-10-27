@@ -1,9 +1,13 @@
 package chess;
 import java.util.Scanner;
 
+import geometry.Position;
+import pieces.Bishop;
+import pieces.Knight;
+import pieces.Queen;
+import pieces.Rook;
+
 public class Chess {
-	
-	static boolean castle = false;
 	
 	static int turn = 0;
 	static boolean drawRequest = false;
