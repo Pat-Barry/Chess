@@ -1,6 +1,14 @@
 package chess;
 
 import java.io.Serializable;
+/**
+ * Piece Object
+ *  
+ *  A <code>Piece</code> object contains the parameters and functionality
+ *  for the Piece object
+ * @author PatrickBarry
+ *
+ */
 
 public abstract class Piece implements Serializable {
 	
@@ -9,35 +17,56 @@ public abstract class Piece implements Serializable {
 	int side;
 	Position pos;
 	
-	
-	public Piece(int i, int x, int y, Board ParentBoard) {
+	/**
+	 * Constructor for the Piece class
+	 * @param i - Player turn
+	 */
+	public Piece(int i) {
 		this.side = i;
-		this.pos = new Position(x, y);
-		this.ParentBoard = ParentBoard;
 	}
 	
-	
+	/**
+	 * First setBoard Method
+	 * @param ParentBoard
+	 * @return this - Returns ParentBoard
+	 */
 	public Piece setBoard(Board ParentBoard) {
 		this.ParentBoard = ParentBoard;
 		return this;
 	}
 	
+	/**
+	 * updatePos Method. Updates current position of piece.
+	 * @param x - Updates x coordinate of piece.
+	 * @param y - Updates y coordinate of piece.
+	 */
 	public void updatePos(int x, int y) {
 		this.pos.x = x; this.pos.y = y;
 	}
 	
-	public Piece(int i) {
-		this.side = i;
-	}
-	
+	/**
+	 * Second setBoard Method
+	 * @param x - X coordinate of piece.
+	 * @param y - Y coordinate of piece.
+	 * @param ParentBoard
+	 */
 	public void setBoard(int x, int y, Board ParentBoard) {
 		this.ParentBoard = ParentBoard;
 		ParentBoard.layout[y][x] = this;
 		this.pos = new Position(x,y);
 	}
 
+	/**
+	 * Abstract getString Method for specific pieces.
+	 */
 	public abstract String getString();
 
+	/**
+	 * Abstract moveTo Method
+	 * @param newpos - New position
+	 * @param promotion - Promoted Piece
+	 * @throws IllegalMoveException
+	 */
 	public abstract void moveTo(Position newpos, Piece promotion) throws IllegalMoveException;
 	
 	
