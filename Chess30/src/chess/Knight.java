@@ -41,12 +41,12 @@ public class Knight extends Piece{
 	 * @throws Exception - If new position is not a legal move for Knight
 	 */
 	@Override
-	public void moveTo(Position newpos, Piece promotion) throws Exception {
+	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
 		// TODO Auto-generated method stub
 		Vector v = new Vector(newpos, pos);
 		if (v.variationOfWithLimit(1, 2, 2)) {
 			if (friendAt(newpos)) {
-				throw new Exception("Fiendly Fire for Knight");
+				throw new IllegalMoveException("Fiendly Fire for Knight");
 			}
 			
 			else {
@@ -55,7 +55,7 @@ public class Knight extends Piece{
 			}
 		}
 		else {
-			throw new Exception("Vector not in step shape");
+			throw new IllegalMoveException("Vector not in step shape");
 		}
 		
 	}

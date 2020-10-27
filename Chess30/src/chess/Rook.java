@@ -10,7 +10,7 @@ package chess;
 
 public class Rook extends Piece {
 
-	boolean hasMoved;
+	boolean hasMoved = false;
 	
 	public Rook(int s, int x, int y, Board ParentBoard) {
 		super(s, x, y, ParentBoard);
@@ -21,10 +21,9 @@ public class Rook extends Piece {
 	 * Constructor for the Rook class
 	 * @param i - Player turn
 	 */
-	public Rook(int i) {
-		super(i);
-		this.side = i;
-		this.hasMoved = false;
+	
+	public Rook(int s) {
+		super(s);
 	}
 	/**
 	 * getString Method
@@ -48,12 +47,12 @@ public class Rook extends Piece {
 	 * @throws Exception - If new position is not a legal move for Rook
 	 */
 	@Override
-	public void moveTo(Position newpos, Piece promotion) throws Exception {
+	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
 		Vector v = new Vector(newpos, this.pos);
 		if(v.variationOf(0, 1)) {
 			if (this.ParentBoard.noCollisions(pos, newpos)) {
 				if (friendAt(newpos)) {
-					throw new Exception("Can't Friendly Fire");
+					throw new IllegalMoveException("Can't Friendly Fire");
 				}
 				
 				else {
@@ -63,11 +62,11 @@ public class Rook extends Piece {
 				}
 			}
 			else {
-				throw new Exception("Collision Detected in Rook movement");
+				throw new IllegalMoveException("Collision Detected in Rook movement");
 			}
 		}
 		else {
-			throw new Exception("Vector is not in step shape");
+			throw new IllegalMoveException("Vector is not in step shape");
 		}
 	}
 	

@@ -160,7 +160,7 @@ wK    wB bR ##    wN wR  1
 		return false;
 	}
 	
-	public void movePiece(Position p, Position np, Piece prom, int s) throws Exception { 
+	public int movePiece(Position p, Position np, Piece prom, int s) throws Exception { 
 		
 		
 		//System.out.println("MP Called");
@@ -208,8 +208,12 @@ wK    wB bR ##    wN wR  1
 				if(!this.KingCanRecover(ns)) {
 					System.out.println("CANNOT RECOVER THE COVER");
 					this.state = s;
+					
+					return 2;
 				}
+				return 1;
 			}
+			return 0;
 			
 		} catch(Exception e) {
 			throw new Exception(e);

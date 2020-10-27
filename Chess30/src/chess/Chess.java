@@ -7,6 +7,7 @@ public class Chess {
 	
 	static int turn = 0;
 	static boolean drawRequest = false;
+	public static int drawItt = -1;
 	public static int gameItteration;
 	
 	public static Board CurrentBoard;
@@ -56,7 +57,12 @@ public class Chess {
 				//System.out.println("35");
 				//CurrentBoard.layout[Input.start_i][Input.start_i].moveTo(new Position(Input.end_j, Input.end_i), Input.promotion);
 				System.out.println("Moving "+Input.start_j+" "+  Input.start_i+" to "+Input.end_j+" "+Input.end_i+" on turn "+turn);
-				CurrentBoard.movePiece(new Position(Input.start_j,  Input.start_i), new Position(Input.end_j, Input.end_i), Input.promotion, turn);
+				int cm = CurrentBoard.movePiece(new Position(Input.start_j,  Input.start_i), new Position(Input.end_j, Input.end_i), Input.promotion, turn);
+				if(cm == 1) {
+					System.out.println("Check");
+				} else if(cm == 2) {
+					System.out.println("Checkmate");
+				}
 			}
 			catch(Exception e) {
 				System.out.println("Illegal move, try again");
@@ -92,12 +98,10 @@ public class Chess {
 				return i;
 			}
 		}
-		
 		return -1;
-		
 	}
 	
-	public static void askForInput() throws Exception{
+	public static void askForInput() throws IllegalMoveException {
 		
 		
 		//System.out.println("IN ask for input");
@@ -126,11 +130,11 @@ public class Chess {
 			Position cpos = new Position(Input.start_j, Input.start_i);
 			Piece showMovePiece = CurrentBoard.getPiece(cpos);
 			if(showMovePiece == null) {
-				throw new Exception("There is no piece that can be tested here");
+				throw new IllegalMoveException("There is no piece that can be tested here");
 				
 			}
 			if(showMovePiece.side != turn) {
-				throw new Exception("Cannot look at other team's moves");
+				throw new IllegalMoveException("Cannot look at other team's moves");
 			}
 			if(showMovePiece instanceof Knight) {
 				System.out.println("have showmovepiece as knight");
@@ -154,7 +158,7 @@ public class Chess {
 						new Filler(0).setBoard(x, y, moveBoard);
 					//	System.out.println("we found a move on "+x+" and "+y);
 					} catch(Exception e) {
-						Exception ne = new Exception("Move cannot be done, King is checked");
+						Exception ne = new IllegalMoveException("Move cannot be done, King is checked");
 						if(ne.equals(e)) {
 							new Filler(1).setBoard(x, y, moveBoard);
 							//moveBoard.layout[y][x] = new Filler(1);
@@ -167,17 +171,17 @@ public class Chess {
 			moveBoard.render();
 			//boardClone.movePiece(newpos, np, new Queen(turn), turn);
 			
-			throw new Exception("Completed Checking Moves");
+			throw new IllegalMoveException("Completed Checking Moves");
 		//	return;
 		}
 		
 		if (s.equals("draw")) {
-			if (drawRequest) {
+			if (drawRequest && (drawItt + 1 == CurrentBoard.gameItteration)) {
 				CurrentBoard.state = -2;
 				return;
 			}
 			
-			throw new Exception("requesting draw when is none");
+			throw new IllegalMoveException("requesting draw when is none");
 		}
 		if (s.length() == 6) { // Resign
 			if (turn == 0) {
@@ -196,11 +200,11 @@ public class Chess {
 		//System.out.println(Input.start_i + " and startj "+Input.start_j);
 		
 		if (CurrentBoard.layout[Input.start_i][Input.start_j] == null) {
-			throw new Exception("start spot is null");
+			throw new IllegalMoveException("start spot is null");
 		}
 		
 		if (CurrentBoard.layout[Input.start_i][Input.start_j].side != turn) {
-			throw new Exception("start side is not equal to turn");
+			throw new IllegalMoveException("start side is not equal to turn");
 		}
 		
 		Input.end_j = charToInt(s.charAt(3));
@@ -212,10 +216,20 @@ public class Chess {
 		
 		
 		if (s.length() == 7) {// Regular Move + Promotion
+			if(turn == 1) {
+				if(Input.end_i != 0) {
+					throw new IllegalMoveException("Cannot request promotion if black isn't moving to x1");
+				} 
+			} else if(turn == 0) {
+				if(Input.end_i != 7) {
+					throw new IllegalMoveException("Cannot request promotion if white isn't moving to x8");
+				}
+			}
 			Input.promotion = charToPiece(s.charAt(6));
 			return;
 		}//Regular Move + Draw;
 		drawRequest = true;
+		drawItt = CurrentBoard.gameItteration;
 		
 		
 		
