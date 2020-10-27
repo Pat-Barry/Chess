@@ -98,7 +98,7 @@ public abstract class Piece implements Serializable {
 	/**
 	 * enemyAt Method
 	 * 
-	 * Checks an enemy of this Piece is located at the provided position. 
+	 * Checks that there is a enemy of this Piece is located at the provided position. 
 	 * 
 	 * @param p - Position that is checked.
 	 * @return true - if enemy is located at Position p. false - if none or same-side piece is located at Position p. 
@@ -115,7 +115,7 @@ public abstract class Piece implements Serializable {
 	/**
 	 * enemyAt Method
 	 * 
-	 * Checks an same-side piece (relative to this Piece) is located at the provided position. 
+	 * Checks that there is a same-side piece (relative to this Piece) is located at the provided position. 
 	 * 
 	 * @param p - Position that is checked.
 	 * @return true - if friend is located at Position p. false - if none or enemy piece is located at Position p. 
@@ -133,7 +133,7 @@ public abstract class Piece implements Serializable {
 	/**
 	 * collisionAt Method
 	 * 
-	 * Checks a Piece is located at the provided position. 
+	 * Checks that there is a Piece is located at the provided position. 
 	 * 
 	 * @param p - Position that is checked.
 	 * @return true - if a Piece is located at Position p. false - if no Piece is located at p. 

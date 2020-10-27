@@ -33,7 +33,6 @@ public class Vector {
 		this.x = np.x - p.x;
 		this.y = np.y - p.y;
 		if(this.x == 0 && this.y == 0) {
-			System.out.println("Found zero vector");
 			throw new IllegalArgumentException("Vector cannot be a 0 0 vector");
 		}	
 	}

@@ -68,21 +68,24 @@ public class Chess {
 				System.out.println("Black wins");
 				break;
 			}
-			
+			int cm = 0;
 			try {
-				int cm = CurrentBoard.movePiece(new Position(Input.start_j,  Input.start_i), new Position(Input.end_j, Input.end_i), Input.promotion, turn);
-				if(cm == 1) {
-					System.out.println("Check");
-				} else if(cm == 2) {
-					System.out.println("Checkmate");
-				}
+				cm = CurrentBoard.movePiece(new Position(Input.start_j,  Input.start_i), new Position(Input.end_j, Input.end_i), Input.promotion, turn);
 			}
 			catch(Exception e) {
 				System.out.println("Illegal move, try again");
 				continue;
 			}
-
+			System.out.println();
 			CurrentBoard.render();
+			if(cm == 1) {
+				System.out.println();
+				System.out.println("Check");
+			} else if(cm == 2) {
+				System.out.println();
+				System.out.println("Checkmate");
+			}
+			
 			if (CurrentBoard.state == 0) {
 				System.out.println("White wins");
 				break;
@@ -93,6 +96,7 @@ public class Chess {
 			}
 			
 			if(turn == 1) { turn = 0; } else { turn = 1; }
+			
 		}
 
 	}
