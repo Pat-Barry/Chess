@@ -9,7 +9,9 @@ package geometry;
  * @author Philip Murray
  */
 public class Vector {
+	/** the x component of the Vector */
 	public int x;
+	/** the y component of the Vector */
 	public int y;
 	
 	/**

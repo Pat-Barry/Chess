@@ -11,7 +11,9 @@ import java.io.Serializable;
  *
  */
 public class Position implements Serializable {
+	/** the x coordinate of the Position. Corresponds to Piece's Rank.   */
 	public int x;
+	/** the y coordinate of the Position. Corresponds to Piece's File.   */
 	public int y;
 	
 	/**
