@@ -120,35 +120,24 @@ wK    wB bR ##    wN wR  1
 	public boolean KingIsChecked(int s) { // this.KingIsChecked() checks if team S is checked on "this" board.
 		                                  // First, it makes a clone of "this" board to test.
 										  // Second, it checks if there exists a move from !S -> S_King. If there exists 1, it returns true. 
-		//Chess.wait(1000);
 		Board bc = this.getCopy();
 		Position TroubledKingPos = new Position(-1,-1);
-		boolean foundKing = false;
 		for(int y=0; y < 8; y++) {
 			for(int x=0; x < 8; x++) {
 				if(bc.layout[y][x] instanceof King) {
 					if(bc.layout[y][x].side == s) {
 						TroubledKingPos = bc.layout[y][x].pos;
-						foundKing = true;
 						break;
 					}
 				}
 			}
-		}
-		//System.out.println("after kf");
-		if(!foundKing) {
-			throw new RuntimeException("Could not find King");
 		}
 		for(int y=0; y < 8; y++) {
 			for(int x=0; x < 8; x++) {
 				if(bc.layout[y][x] != null) {
 					if(bc.layout[y][x].side != s) {
 						try { 
-							//System.out.println("Trying move");
 							bc.layout[y][x].moveTo(TroubledKingPos, null);
-							if(Chess.castle) {
-								System.out.println("MOVE : "+x+","+y+" -> "+TroubledKingPos.x+","+TroubledKingPos.y);
-							}
 							return true;
 						} catch(Exception e) {
 							
@@ -161,22 +150,7 @@ wK    wB bR ##    wN wR  1
 	}
 	
 	public int movePiece(Position p, Position np, Piece prom, int s) throws Exception { 
-		
-		
-		//System.out.println("MP Called");
-		/* 
-		 * This is the public-API to move a piece on a board. It makes a clone of the "this" board.
-		 * Then it tests to see of the piece_at_position_p.moveTo(np) call is valid on the clone.
-		 * If it is valid, it checks if team S on the cloned board is in a checked state.
-		 * If it is still valid, it calls the moveTo() on the this board.
-		 * 
-		 */
-		
-		//Chess.wait(1000);
-		//System.out.println(p.x + " and "+p.y);
-		//if(this.layout[0][3] == null) {
-			//System.out.println("0 3 is null");
-		//}
+
 		if(this.getPiece(p) == null) {
 			throw new Exception("No piece located at p");
 		}
@@ -204,11 +178,8 @@ wK    wB bR ##    wN wR  1
 			int ns = 1;
 			if(s == 1) ns = 0;
 			if(this.KingIsChecked(ns)) {
-				System.out.println("ns is checked");
 				if(!this.KingCanRecover(ns)) {
-					System.out.println("CANNOT RECOVER THE COVER");
 					this.state = s;
-					
 					return 2;
 				}
 				return 1;
@@ -222,16 +193,11 @@ wK    wB bR ##    wN wR  1
 	
 	public boolean KingCanRecover(int s) {
 		
-		System.out.println("KCR");
-		
 		/* Creates a clone of the 'this' board rc. 
 		 * Uses the public-API movePiece to, for every S_Piece on the board, see if there exists a move S_Piece -> Spot such that there is no longer a check.
 		 * If the move does not exist, the king cannot recover. 
 		 */
 		
-		if(!KingIsChecked(s)) {
-			throw new RuntimeException("This method should not be called");
-		}
 		Board rb = this.getCopy();
 		for(int y=0; y < 8; y++) {
 			for(int x=0; x < 8; x++) {
@@ -254,17 +220,6 @@ wK    wB bR ##    wN wR  1
 		return false;
 	}
 
-	void verifyPosIntegrity() {
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				if(layout[i][j] != null) {
-					if(layout[i][j].pos.x != j && layout[i][j].pos.y != i) {
-						System.out.println("WARNING! Layout["+i+"]["+j+"] does not match ("+i+","+j+")");
-					}
-				}
-			}
-		}
-	}
 	void updatePos() {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) { 
@@ -293,9 +248,6 @@ wK    wB bR ##    wN wR  1
 		return false;
 	}
 	boolean noCollisions(Position p1, Position p2) {
-		if(p1.equals(p2)) {
-			throw new IllegalArgumentException("Collision method must take two non-identical positions");
-		}
 		Vector sv = (new Vector(p2, p1)).UnitStepVector(); //for(int x = p2.x - sv.x, y = p2.y - sv.y; p1.equals(x,y) == false; x = x - sv.x, y = y - sv.y) {
 		for(Position i = new Position(p2.x - sv.x, p2.y - sv.y); p1.equals(i) == false; i = new Position(i.x - sv.x, i.y - sv.y)) {
 			if(getPiece(i) != null) {
@@ -363,23 +315,8 @@ wK    wB bR ##    wN wR  1
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("Clone failed");
+			throw new RuntimeException("Serialization Clone Failed");
 		}
 	}
 }
 
-/*
-if(kbc.layout[y][x].canMoveTo(new Position(a, b))) {
-	Board boardcopy = this.getCopy();
-	try {
-		boardcopy.layout[x][y].moveTo(new Position(a, b), null);
-		boardcopy.gameItteration++;
-		if(!boardcopy.KingIsChecked(s)) {
-			return true;
-		}
-	} catch(Exception e) {
-		System.out.println("Copy doesn't have parallel move ability");
-		System.out.println(e);
-	}
-}
-*/

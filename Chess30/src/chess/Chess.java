@@ -13,31 +13,18 @@ public class Chess {
 	public static Board CurrentBoard;
 	public static Board DeepCopy;
 	
-	public static void wait(int ms){
-		try {
-			Thread.sleep(ms);
-		} catch(Exception e) {
-			
-		}
-	}
-	
 	public static void main(String[] args) {
 		CurrentBoard = new Board();
 		CurrentBoard.render();
 		
 
 		for (gameItteration = 0; true; gameItteration++) {
-			//System.out.println("game itt "+gameItteration);
-			//wait(1000);
 			try {
 				askForInput();
 			}
 			
 			catch(Exception e) {
-				//System.out.println("34");
-				System.out.println(e);
 				System.out.println("Illegal move, try again");
-			//	e.printStackTrace();
 				continue;
 			}
 			if (CurrentBoard.state == -2) {
@@ -53,10 +40,8 @@ public class Chess {
 				System.out.println("Black wins");
 				break;
 			}
+			
 			try {
-				//System.out.println("35");
-				//CurrentBoard.layout[Input.start_i][Input.start_i].moveTo(new Position(Input.end_j, Input.end_i), Input.promotion);
-				System.out.println("Moving "+Input.start_j+" "+  Input.start_i+" to "+Input.end_j+" "+Input.end_i+" on turn "+turn);
 				int cm = CurrentBoard.movePiece(new Position(Input.start_j,  Input.start_i), new Position(Input.end_j, Input.end_i), Input.promotion, turn);
 				if(cm == 1) {
 					System.out.println("Check");
@@ -66,27 +51,19 @@ public class Chess {
 			}
 			catch(Exception e) {
 				System.out.println("Illegal move, try again");
-			//	e.printStackTrace();
-				System.out.println(e);
 				continue;
 			}
-			//CurrentBoard.updatePos();
-			//Check for checkmate
+
 			CurrentBoard.render();
 			if (CurrentBoard.state == 0) {
 				System.out.println("White wins");
 				break;
 			}
-			
 			if (CurrentBoard.state == 1) {
 				System.out.println("Black wins");
 				break;
 			}
 			if(turn == 1) { turn = 0; } else { turn = 1; }
-			//CurrentBoard.gameItteration++; Doing this when movePiece confirmed
-			
-			
-			CurrentBoard.verifyPosIntegrity();
 		}
 
 	}
@@ -102,12 +79,8 @@ public class Chess {
 	}
 	
 	public static void askForInput() throws IllegalMoveException {
-		
-		
-		//System.out.println("IN ask for input");
-		//wait(1000);
+
 		clearInput();
-		
 		if (turn == 0) {
 			System.out.print("White's Input: ");
 		}
@@ -117,63 +90,7 @@ public class Chess {
 		}
 		Scanner in = new Scanner(System.in);         
 		String s = in.nextLine();
-		System.out.println(s);
 		
-		
-		if (s.length() == 2) {
-			Input.start_j = charToInt(s.charAt(0));
-			Input.start_i = Integer.parseInt( Character.toString(s.charAt(1)) ) - 1;
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			//System.out.println("Pos x = "+Input.start_j+"pos y is "+Input.start_i);
-			Position cpos = new Position(Input.start_j, Input.start_i);
-			Piece showMovePiece = CurrentBoard.getPiece(cpos);
-			if(showMovePiece == null) {
-				throw new IllegalMoveException("There is no piece that can be tested here");
-				
-			}
-			if(showMovePiece.side != turn) {
-				throw new IllegalMoveException("Cannot look at other team's moves");
-			}
-			if(showMovePiece instanceof Knight) {
-				System.out.println("have showmovepiece as knight");
-			}
-			
-			Board moveBoard = new Board();
-			for(int y = 0; y < 8; y++) {
-				for(int x = 0; x < 8; x++) {
-					moveBoard.layout[y][x] = null;
-				}
-			}
-
-			
-			for(int y = 0; y < 8; y++) {
-				for(int x = 0; x < 8; x++) {
-					//System.out.println("loop");
-					try {
-						Board boardClone = CurrentBoard.getCopy();
-					//	System.out.println("Trying to move to "+x+" and "+y);
-						boardClone.movePiece(cpos, new Position(x, y), new Queen(turn), turn);
-						new Filler(0).setBoard(x, y, moveBoard);
-					//	System.out.println("we found a move on "+x+" and "+y);
-					} catch(Exception e) {
-						Exception ne = new IllegalMoveException("Move cannot be done, King is checked");
-						if(ne.equals(e)) {
-							new Filler(1).setBoard(x, y, moveBoard);
-							//moveBoard.layout[y][x] = new Filler(1);
-						} else {
-							moveBoard.layout[y][x] = null;
-						}
-					}
-				}
-			}
-			moveBoard.render();
-			//boardClone.movePiece(newpos, np, new Queen(turn), turn);
-			
-			throw new IllegalMoveException("Completed Checking Moves");
-		//	return;
-		}
 		
 		if (s.equals("draw")) {
 			if (drawRequest && (drawItt + 1 == CurrentBoard.gameItteration)) {
@@ -185,19 +102,15 @@ public class Chess {
 		}
 		if (s.length() == 6) { // Resign
 			if (turn == 0) {
-				System.out.println("RESIGN 0");
 				CurrentBoard.state = 1;
 			}
 			else {
-				System.out.println("RESIGN 1");
 				CurrentBoard.state = 0;
 			}
 			return;
 		}
 		Input.start_j = charToInt(s.charAt(0));
-		Input.start_i = Integer.parseInt( Character.toString(s.charAt(1)) ) - 1; //-Integer.parseInt( Character.toString(s.charAt(1)) ) + 8;
-		
-		//System.out.println(Input.start_i + " and startj "+Input.start_j);
+		Input.start_i = Integer.parseInt( Character.toString(s.charAt(1)) ) - 1;
 		
 		if (CurrentBoard.layout[Input.start_i][Input.start_j] == null) {
 			throw new IllegalMoveException("start spot is null");
@@ -208,7 +121,7 @@ public class Chess {
 		}
 		
 		Input.end_j = charToInt(s.charAt(3));
-		Input.end_i =  Integer.parseInt( Character.toString(s.charAt(4)) ) - 1; //-((int) s.charAt(4)) + 8;
+		Input.end_i =  Integer.parseInt( Character.toString(s.charAt(4)) ) - 1;
 		
 		if (s.length() < 6) {// Regular Move
 			return;
@@ -230,8 +143,6 @@ public class Chess {
 		}//Regular Move + Draw;
 		drawRequest = true;
 		drawItt = CurrentBoard.gameItteration;
-		
-		
 		
 	}
 	
