@@ -9,14 +9,15 @@ import pieces.Rook;
 
 
 /**
- * @author Patrick Barry 
- * @author Philip Murray
  * 
- * Chess Class
  * Initiates and orchestrates the game of Chess in the main method.
  * Houses functionality to request, pre-process and store user input. 
  *
+ * @author Patrick Barry
+ * @author Philip Murray
  */
+
+
 public class Chess {
 	
 	/**
@@ -41,7 +42,7 @@ public class Chess {
 	/**
 	 * Main Method for generating chess Board and running chess match.
 	 * Iterates over the range of turns which will occur, making requests for input, requesting pieces to be moved, calling the Board to be rendered, and declaring game states.
-	 * @param args - Not used
+	 * @param args  Not used
 	 */
 	public static void main(String[] args) {
 		CurrentBoard = new Board();
@@ -102,9 +103,9 @@ public class Chess {
 	}
 	
 	/**
-	 * charToInt Method which takes in a user-input char and converts char to a Rank (jth or x-position) on the board
-	 * @param c - Character input of Rank
-	 * @return i - jth or x-position on board for legal move. -1 for Illegal move.
+	 * Takes in a user-input char and converts char to a Rank (jth or x-position) on the board
+	 * @param c  Character input of Rank
+	 * @return i  jth or x-position on board for legal move. -1 for Illegal move.
 	 */
 	public static int charToInt(char c) {
 		char[] charArray = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
@@ -117,12 +118,12 @@ public class Chess {
 	}
 	
 	/**
-	 * askForInput Method which takes in user input for moving pieces with or without promotion, requesting a draw, declaring a draw, and resigning
-	 * @throws IllegalMoveException - Stating draw none was requested by opposing team
-	 * @throws IllegalMoveException - Piece at initial provided position is null
-	 * @throws IllegalMoveException - Piece at initial provided position is not on side of player
-	 * @throws IllegalMoveException - Cannot request promotion if black isn't moving to x1
-	 * @throws IllegalMoveException - Cannot request promotion if white isn't moving to x8
+	 * Takes in user input for moving pieces with or without promotion, requesting a draw, declaring a draw, and resigning
+	 * @throws IllegalMoveException  Stating draw none was requested by opposing team
+	 * @throws IllegalMoveException  Piece at initial provided position is null
+	 * @throws IllegalMoveException  Piece at initial provided position is not on side of player
+	 * @throws IllegalMoveException  Cannot request promotion if black isn't moving to x1
+	 * @throws IllegalMoveException  Cannot request promotion if white isn't moving to x8
 	 */
 	public static void askForInput() throws IllegalMoveException {
 
@@ -194,9 +195,8 @@ public class Chess {
 	}
 	
 	/**
-	 * charToPiece Method
 	 * Maps an user-inputted char parameter to create a piece for promotion.
-	 * @param s - char input for new promoted piece.
+	 * @param s  char input for new promoted piece.
 	 * @return new Piece depending on char input.
 	 */
 	public static Piece charToPiece(char s) {
@@ -213,7 +213,7 @@ public class Chess {
 	}
 	
 	/**
-	 *  clearInput Method which sets starting position, ending positions, and promotion to 0 and null respectively.
+	 *  Sets starting position, ending positions, and promotion to 0 and null respectively.
 	 *  Called before asking for input to clear data from previous input request.
 	 */
 	public static void clearInput() {

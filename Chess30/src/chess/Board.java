@@ -17,14 +17,13 @@ import pieces.Pawn;
 import pieces.Queen;
 import pieces.Rook;
 
-/**
- * @author Patrick Barry and Philip Murray
- * 
- * Board Object
+/**  
+ * The Board class represents a 2D chess Board, storing it's state via an 8 by 8 grid of Piece instances, and an 8 by 8 string visual display.
+ * Provides movePiece and render for the Chess class to orchestrate with. 
+ * Provides helper methods for the Pieces to conduct move-legality verification with. 
  *  
- *  The <code>Board</code> class represents a 2D chess Board, storing it's state via an 8 by 8 grid of Piece instances, and an 8 by 8 string visual display.
- *  Provides movePiece and render for the Chess class to orchestrate with. 
- *  Provides helper methods for the Pieces to conduct move-legality verification with. 
+ * @author Patrick Barry
+ * @author Philip Murray
  *
  */
 public class Board implements Serializable {
@@ -93,11 +92,8 @@ public class Board implements Serializable {
 	}
 	
 	/**
-	 * getCopy Method
 	 * Creates a copy of this board via serialization. Used when testing if moving a piece results in or maintains a checked state.
-	 * 
-	 * @param p1 - Start position on this Board. 
-	 * @param p2 - End position on this Board.
+	 * @return Returns a copy of the current board
 	 */
 	public Board getCopy() {
 		try {
@@ -116,16 +112,15 @@ public class Board implements Serializable {
 	
 	
 	/**
-	 * EnemyCanAttackMethod
 	 * This method determines if the enemy side can capture at a specific position on the Board.
 	 * Used to inspect the two spaces which the King travels when castling. 
 	 * 
 	 * For each piece of the side s's opponent, it is tested if it can be called to move to position p.
 	 * If such piece exists, this method returns true.
 	 * 
-	 * @param s - The side (0: white, 1: black) in question
-	 * @param p - The position that the opponent of side s may capture
-	 * @return true - if the opponent of side s can capture at position p. false - If the opponent cannot capture at position p.
+	 * @param s  The side (0: white, 1: black) in question
+	 * @param p  The position that the opponent of side s may capture
+	 * @return true  if the opponent of side s can capture at position p. false - If the opponent cannot capture at position p.
 	 */
 	public boolean EnemyCanAttack(int s, Position p) {
 		Board bc = this.getCopy();
@@ -148,13 +143,12 @@ public class Board implements Serializable {
 	}
 	
 	/**
-	 * KingIsChecked
 	 * This method determines if the King of side s is checked.
 	 * For each piece of the side s's opponent, it is tested if it can be called to move to the King's piece.
 	 * If such piece exists, this method returns true. 
 	 * 
-	 * @param s - The side (0: white, 1: black) of the King
-	 * @return true - if the opponent of side s can capture at the s's King. false - If the opponent cannot capture the King.
+	 * @param s  The side (0: white, 1: black) of the King
+	 * @return true  if the opponent of side s can capture at the s's King. false - If the opponent cannot capture the King.
 	 */
 	public boolean KingIsChecked(int s) {
 		                         
@@ -188,13 +182,12 @@ public class Board implements Serializable {
 	}
 	
 	/**
-	 * KingCanRecover
 	 * This method determines if side s's King can recover from a Checked state.
 	 * For every piece the King has, for every spot on the board, the movePiece method is called to move the Piece to that spot.
 	 * If there exists a valid move (no IllegalMoveException is thrown by the movePiece method), then this method returns true.
 	 * 
-	 * @param s - The side (0: white, 1: black) of the King
-	 * @return true - if side s is in Checkmate state. false - if side s is in Checkmate state.
+	 * @param s  The side (0: white, 1: black) of the King
+	 * @return true  if side s is in Checkmate state. false - if side s is in Checkmate state.
 	 */
 	public boolean KingCanRecover(int s) {
 		
@@ -224,7 +217,6 @@ public class Board implements Serializable {
 	
 	
 	/**
-	 * movePiece Method
 	 * This method is responsible enacting a player's move by calling for the piece at position p to move to position np. 
 	 * It conducts some initial legality checks, then it clones this instance of chess Board, requests for the piece to move from p to np.
 	 * The piece may throw an IllegalMoveException. After the piece is moved, the piece's King is checked to not be in a Checked state.
@@ -236,11 +228,14 @@ public class Board implements Serializable {
 	 * If opponent in Checkmate, this instance of the Board's state is set to the winning side's team ID (0 or 1). 
 	 * 
 	 * 
-	 * @param p - Position of a player's piece
-	 * @param np - Position the player is attempting to move their piece to
-	 * @param prom - Piece that is the optional promotion parameter for Pawn cases
-	 * @param s - The side (0: white, 1: black) of the player
-	 * @return 0 - if the player's opponent is not Checked. 1 - the opponent's player is Checked. 2 - the opponent's player is in a Checkmate state.
+	 * @param p  Position of a player's piece
+	 * @param np  Position the player is attempting to move their piece to
+	 * @param prom  Piece that is the optional promotion parameter for Pawn cases
+	 * @param s  The side (0: white, 1: black) of the player
+	 * @throws IllegalMoveException  No piece located at p
+	 * @throws IllegalMoveException  Piece at p is not from current team
+	 * @throws IllegalMoveException  Move cannot be done, King is (or still is) checked
+	 * @return 0  If the player's opponent is not Checked. 1 - the opponent's player is Checked. 2 - the opponent's player is in a Checkmate state.
 	 */
 	public int movePiece(Position p, Position np, Piece prom, int s) throws IllegalMoveException { 
 
@@ -281,7 +276,6 @@ public class Board implements Serializable {
 	}
 	
 	/**
-	 * updatePos Method
 	 * This method is responsible for updating the position of each Piece on this Board after the moveTo method is called. 
 	 * This ensures that the internal Position of the Piece moved always matches the indexical position of this Board's layout which references it. 
 	 */
@@ -296,21 +290,20 @@ public class Board implements Serializable {
 	}
 	
 	/**
-	 * getPiece Method
 	 * Responsible for updating the position member of each Piece after the moveTo method is called, to match that of this Board's Piece layout. 
 	 * This ensures that the internal Position of the Piece moved is always updated. 
-	 * 
+	 * @param p  Positional index of this Board's layout.
+	 * @return Updated Piece
 	 */
 	public Piece getPiece(Position p) {
 		return this.layout[p.y][p.x];
 	}
 	
 	/**
-	 * setPiece Method
 	 * Responsible for setting the setting the positional index p of this Board's layout to be a reference to Piece pic.
 	 * 
-	 * @param p   - Positional index of this Board's layout. 
-	 * @param pic - Piece of this method updates this Board's layout at p to reference.  
+	 * @param p    Positional index of this Board's layout. 
+	 * @param pic  Piece of this method updates this Board's layout at p to reference.  
 	 */
 	public void setPiece(Position p, Piece pic) {
 		layout[p.y][p.x] = pic; 
@@ -318,11 +311,11 @@ public class Board implements Serializable {
 	
 	
 	/**
-	 * noCollisions Method
 	 * Determines if there are no pieces located between two linearly separated positions on the board.
 	 * 
-	 * @param p1 - Start position on this Board. 
-	 * @param p2 - End position on this Board.
+	 * @param p1  Start position on this Board. 
+	 * @param p2  End position on this Board.
+	 * @return true - If no collisions exist. false - If collisions exist.
 	 */
 	public boolean noCollisions(Position p1, Position p2) {
 		Vector sv = (new Vector(p2, p1)).UnitStepVector();
@@ -338,7 +331,6 @@ public class Board implements Serializable {
 	
 	
 	/**
-	 * render Method
 	 * Prints this board as an ASCII representation in the console
 	 */
 	void render() {

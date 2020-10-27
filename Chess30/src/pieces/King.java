@@ -7,9 +7,8 @@ import geometry.Position;
 import geometry.Vector;
 
 /**
- * King Class
  * 
- * A <code>King</code> is the representation of a king chess piece, implementing the abstract methods declared in Piece.
+ * A King is the representation of a king chess piece, implementing the abstract methods declared in Piece.
  *  
  * @author Patrick Barry
  * @author Philip Murray
@@ -26,7 +25,7 @@ public class King extends Piece {
 	
 	/**
 	 * Constructor for the King class
-	 * @param s - side (0: white, 1: black) of the Queen
+	 * @param s  side (0: white, 1: black) of the Queen
 	 */
 	public King(int s) {
 		super(s);
@@ -38,7 +37,6 @@ public class King extends Piece {
 	}
 	
 	/**
-	 * getString Method
 	 * Returns ASCII representation of the King. 
 	 * Used in Board.render method
 	 * @return bK - If black King. wK - If white King
@@ -53,21 +51,20 @@ public class King extends Piece {
 	}
 
 	/**
-	 * moveTo Method
 	 * This is the King's implementation of the moveTo method. 
 	 * Performs various legality checks on requested movement. 
 	 * If a check fails, an IllegalMoveException is thrown corresponding to the failed check.
 	 * Move is applied on this Piece's ParentBoard.
 	 * 
 	 *  
-	 * @param newpos - Position the King is moving to
-	 * @param promotion - Not used in King's implementation
-	 * @throws IllegalMoveException - For castling: King cannot start at, move through, or end up at a position that can be attacked
-	 * @throws IllegalMoveException - For castling: There cannot be a Piece between the King/Rook
-	 * @throws IllegalMoveException - For castling: Rook must (1) not have moved and (2) be on same team
-	 * @throws IllegalMoveException - For castling: Cannot castle with non-Rook Piece
-	 * @throws IllegalMoveException - Cannot capture same-team Piece
-	 * @throws IllegalMoveException - Move Vector does not match any of the allowed movement vectors for this Piece
+	 * @param newpos  Position the King is moving to
+	 * @param promotion  Not used in King's implementation
+	 * @throws IllegalMoveException  For castling: King cannot start at, move through, or end up at a position that can be attacked
+	 * @throws IllegalMoveException  For castling: There cannot be a Piece between the King/Rook
+	 * @throws IllegalMoveException  For castling: Rook must (1) not have moved and (2) be on same team
+	 * @throws IllegalMoveException  For castling: Cannot castle with non-Rook Piece
+	 * @throws IllegalMoveException  Cannot capture same-team Piece
+	 * @throws IllegalMoveException  Move Vector does not match any of the allowed movement vectors for this Piece
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {

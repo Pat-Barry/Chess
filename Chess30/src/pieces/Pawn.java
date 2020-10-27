@@ -6,9 +6,8 @@ import geometry.Position;
 import geometry.Vector;
 
 /**
- * Pawn Class
  * 
- * A <code>Pawn</code> is the representation of a pawn chess piece, implementing the abstract methods declared in Piece.
+ * A Pawn is the representation of a pawn chess piece, implementing the abstract methods declared in Piece.
  *  
  * @author Patrick Barry
  * @author Philip Murray
@@ -32,7 +31,7 @@ public class Pawn extends Piece {
 	
 	/**
 	 * Constructor for the Rook class
-	 * @param s - side (0: white, 1: black) of the Rook
+	 * @param s  side (0: white, 1: black) of the Rook
 	 */
 	public Pawn(int s) {
 		super(s);
@@ -47,7 +46,6 @@ public class Pawn extends Piece {
 	
 	
 	/**
-	 * getString Method
 	 * Returns ASCII representation of the Queen
 	 * Used in Board.render method
 	 * @return bp - If black Pawn. wp - If white Pawn.
@@ -63,19 +61,18 @@ public class Pawn extends Piece {
 
 	
 	/**
-	 * moveTo Method
 	 * This is the Pawn's implementation of the moveTo method. 
 	 * Performs various legality checks on requested movement. 
 	 * If a check fails, an IllegalMoveException is thrown corresponding to the failed check.
 	 * Move is applied on this Piece's ParentBoard.
 	 * 
-	 * @param newpos - New position
-	 * @param promotion - Optional Piece that is supplied when Pawn reaches the other end of the chess Board. Promotion replaces Pawn at newpos. 
-	 * @throws IllegalMoveException - For Pawn: Cannot move a step forward when Piece is located there
-	 * @throws IllegalMoveException - For Pawn: Diagonal movement requires capture
-	 * @throws IllegalMoveException - For Pawn: Can only move two steps forward on first move
-	 * @throws IllegalMoveException - For Pawn: Cannot move two steps forward another Piece is located there
-	 * @throws IllegalMoveException - Move vector does not match a legal move
+	 * @param newpos  New position
+	 * @param promotion  Optional Piece that is supplied when Pawn reaches the other end of the chess Board. Promotion replaces Pawn at newpos. 
+	 * @throws IllegalMoveException  For Pawn: Cannot move a step forward when Piece is located there
+	 * @throws IllegalMoveException  For Pawn: Diagonal movement requires capture
+	 * @throws IllegalMoveException  For Pawn: Can only move two steps forward on first move
+	 * @throws IllegalMoveException  For Pawn: Cannot move two steps forward another Piece is located there
+	 * @throws IllegalMoveException  Move vector does not match a legal move
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
@@ -131,11 +128,10 @@ public class Pawn extends Piece {
 	}
 	
 	/**
-	 * isPassantPawnAt Method
 	 * Method is used by Pawn's moveTo implementation to see if there exists an enemy Pawn which has moved two steps in the previous turn. 
 	 * 
-	 * @param p - Position to check. 
-	 * @return true - if there exists a Pawn at p which has moved two steps in the previous turn. false - if no such pawn exists. 
+	 * @param p  Position to check. 
+	 * @return true  if there exists a Pawn at p which has moved two steps in the previous turn. false - if no such pawn exists. 
 	 */
 	boolean isPassantPawnAt(Position p) {
 		if(ParentBoard.getPiece(p) == null) {
