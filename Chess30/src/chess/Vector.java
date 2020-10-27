@@ -7,12 +7,11 @@ public class Vector {
 		this.x = x;
 		this.y = y;
 	}
-	public Vector(Position np, Position p) { //Create new vector with t= new pos and i= this.pos
-		//System.out.println(np.x +" and "+p.x);
-		//System.out.println(np.y +" and "+p.y);
+	public Vector(Position np, Position p) {
 		this.x = np.x - p.x;
 		this.y = np.y - p.y;
 		if(this.x == 0 && this.y == 0) {
+			System.out.println("Found zero vector");
 			throw new IllegalArgumentException("Vector cannot be a 0 0 vector");
 		}	
 	}
@@ -23,17 +22,12 @@ public class Vector {
 	public boolean equals(int x, int y) {
 		return this.x == x && this.y == y;
 	}
-	public String toString() {
-		return "<"+this.x+","+this.y+">";
-	}
-	
 		
 	public boolean variationOfWithLimit(int x, int y, double limit) {
 		if(!this.variationOf(x, y)) {
 			return false;
 		} 
 		if(Math.abs(this.x) > limit || Math.abs(this.y) > limit) {
-		//	System.out.println("This x "+this.x+" and "+this.y);
 			return false;
 		}
 		return true;
@@ -42,7 +36,7 @@ public class Vector {
 	public boolean variationOf(int x, int y) { //checks if the vector matches the <x, y> pattern given, L = <1, 2>, R = <0, 1>, B = <1, 1>
 		if( (x == 0 && y == 0) || (this.x == 0 && this.y == 0) ) {
 			throw new IllegalArgumentException();
-		} //From this point we know that each vector must have a non-zero component
+		} 
 		
 		
 		// Say v = <5,0> and we do v.variationOf(<0,1>)
@@ -89,19 +83,3 @@ public class Vector {
 		return new Vector((int) Math.abs(this.x)/this.x, (int) Math.abs(this.y)/this.y);
 	}
 }
-
-
-/*
- if( x == 0 || this.x == 0 ) {
-			if( x == 0 && this.x == 0 ) {
-				return true;
-			}
-			return false;
-		}
-		if( y == 0 || this.y == 0 ) {
-			if( y == 0 && this.y == 0 ) {
-				return true;
-			}
-			return false;
-		}
-		*/
