@@ -22,27 +22,36 @@ import pieces.Rook;
  * 
  * Board Object
  *  
- *  The <code>Board</code> class represents a chessboard, containing the 8 x 8 grid which stores pieces.
- * 
- * 
+ *  The <code>Board</code> class represents a 2D chess Board, storing it's state via an 8 by 8 grid of Piece instances, and an 8 by 8 string visual display.
+ *  Provides movePiece and render for the Chess class to orchestrate with. 
+ *  Provides helper methods for the Pieces to conduct move-legality verification with. 
  *
  */
 public class Board implements Serializable {
-	public Piece[][] layout;
-	public String[][] stringBoard;
-	public int state;
-	public int gameItteration;
+	
+	/** Stores the representation of the grid of a chess Board as an 8 by 8 Piece double-array.
+	 * The first index corresponds to the File (or the ith or y-position)
+	 * The second index corresponds to the Rank (or the jth or x-position)
+	 */
+	public Piece[][] layout = new Piece[8][8];
+	
+	/** Stores a visual representation of the grid of a chess Board as an 8 by 8 ASCII double-array 
+	 *  Rendered from the Board.render method from Board.layout
+	 */
+	public String[][] stringBoard = new String[8][8];
+	
+	/** State of the chess game:   In Game: -1, White Wins: 0, Black Wins: 1, Draw: 2 */
+	public int state = -1;
+	
+	/** Number of turns that have been played. Diverges from the Chess.gameItteration by 1 when testing possible moves in Check detection methods */
+	public int gameItteration = 0;
+	
+	
 	
 	/**
-	 * Constructor of the Board class. Returns a new chess Board with a new set of chess pieces in their starting position. 
+	 * Constructor of the Board class. Returns a new chess Board with a new set of chess pieces in their initial positions. 
 	 */
-	
 	public Board() {
-		layout = new Piece[8][8];
-		stringBoard = new String[8][8];
-		state = -1;
-		gameItteration = 0;
-		
 		
 		new Pawn(0).setBoard(0, 1, this);
 		new Pawn(0).setBoard(1, 1, this);
@@ -53,6 +62,7 @@ public class Board implements Serializable {
 		new Pawn(0).setBoard(6, 1, this);
 		new Pawn(0).setBoard(7, 1, this);
 		new Rook(0).setBoard(0, 0, this);
+		
 		new Knight(0).setBoard(1, 0, this);
 		new Bishop(0).setBoard(2, 0, this);
 		new Queen(0).setBoard(3, 0, this);
@@ -60,6 +70,7 @@ public class Board implements Serializable {
 		new Bishop(0).setBoard(5, 0, this);
 		new Knight(0).setBoard(6, 0, this);
 		new Rook(0).setBoard(7, 0, this);
+		
 		
 		new Pawn(1).setBoard(0, 6, this);
 		new Pawn(1).setBoard(1, 6, this);
@@ -83,7 +94,7 @@ public class Board implements Serializable {
 	
 	/**
 	 * getCopy Method
-	 * Creates a copy of this board. Used when testing if moving a piece results in or maintains a checked state.
+	 * Creates a copy of this board via serialization. Used when testing if moving a piece results in or maintains a checked state.
 	 * 
 	 * @param p1 - Start position on this Board. 
 	 * @param p2 - End position on this Board.
@@ -314,7 +325,7 @@ public class Board implements Serializable {
 	 * @param p2 - End position on this Board.
 	 */
 	public boolean noCollisions(Position p1, Position p2) {
-		Vector sv = (new Vector(p2, p1)).UnitStepVector(); //for(int x = p2.x - sv.x, y = p2.y - sv.y; p1.equals(x,y) == false; x = x - sv.x, y = y - sv.y) {
+		Vector sv = (new Vector(p2, p1)).UnitStepVector();
 		for(Position i = new Position(p2.x - sv.x, p2.y - sv.y); p1.equals(i) == false; i = new Position(i.x - sv.x, i.y - sv.y)) {
 			if(getPiece(i) != null) {
 				return false;
@@ -364,7 +375,7 @@ public class Board implements Serializable {
 				System.out.print(stringBoard[i][j] + " ");
 				
 			}
-			System.out.print(" "+(i+1));
+			System.out.print(""+(i+1));
 			System.out.println();
 		}
 		char[] charArray = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};

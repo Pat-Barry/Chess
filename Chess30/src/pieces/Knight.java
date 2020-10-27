@@ -6,25 +6,29 @@ import geometry.Position;
 import geometry.Vector;
 
 /**
- *  Knight Object
+ * Knight Class
+ * 
+ * A <code>Knight</code> is the representation of a knight chess piece, implementing the abstract methods declared in Piece.
  *  
- *  A <code>Knight</code> object contains the parameters and functionality
- *  for the knight piece.
- *  @author PatrickBarry
+ * @author Patrick Barry
+ * @author Philip Murray
+ *
  */
 public class Knight extends Piece{
 	
 	/**
-	 * Constructor for the Knight Class
-	 * @param i - Player turn
+	 * Constructor for the Knight class
+	 * @param s - side (0: white, 1: black) of the Knight
 	 */
-	public Knight(int i) {
-		super(i);
-		this.side = i;
+	public Knight(int s) {
+		super(s);
 	}
+	
 	/**
 	 * getString Method
-	 * @return bN - If black knight. wN - If white knight.
+	 * Returns ASCII representation of this Knight. 
+	 * Used in Board.render method
+	 * @return bN - If black Knight. wN - If white Knight
 	 */
 	@Override
 	public String getString() {
@@ -37,10 +41,16 @@ public class Knight extends Piece{
 
 	/**
 	 * moveTo Method
-	 * @param newpos - New position
-	 * @param promotion - Promoted piece
-	 * @throws IllegalMoveException - Fiendly Fire for Knight
-	 * @throws IllegalMoveException - Move Vector not allowed
+	 * This is the Knight's implementation of the moveTo method. 
+	 * Performs various legality checks on requested movement. 
+	 * If a check fails, an IllegalMoveException is thrown corresponding to the failed check.
+	 * Move is applied on this Piece's ParentBoard.
+	 * 
+	 *  
+	 * @param newpos - Position the Piece is moving to
+	 * @param promotion - Not used in Knight's implementation
+	 * @throws IllegalMoveException - Cannot capture same-side Piece
+	 * @throws IllegalMoveException - Move Vector does not match any of the allowed movement vectors for this Piece
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
@@ -48,7 +58,7 @@ public class Knight extends Piece{
 		Vector v = new Vector(newpos, pos);
 		if (v.variationOfWithLimit(1, 2, 2)) {
 			if (friendAt(newpos)) {
-				throw new IllegalMoveException("Fiendly Fire for Knight");
+				throw new IllegalMoveException("Cannot capture same-side Piece");
 			}
 			
 			else {
@@ -57,11 +67,8 @@ public class Knight extends Piece{
 			}
 		}
 		else {
-			throw new IllegalMoveException("Move Vector not allowed");
-		}
-		
+			throw new IllegalMoveException("Move Vector does not match any of the allowed movement vectors for this Piece");
+		}	
 	}
 	
-
-
 }

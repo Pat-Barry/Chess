@@ -1,12 +1,13 @@
 package geometry;
 
 /**
- * Vector Object
+ * Vector Class
  *  
- *  A <code>Vector</code> object contains the parameters and functionality
- *  for the Vector object
- * @author PatrickBarry
- *
+ *  The <code>Vector</code> class's role is to represent the "shape" of a Piece's movement from it's position to a new position.
+ *  Has methods to compute whether or not a Piece's movement is of an allowed "shape", i.e. diagonal for Bishop, "L" shaped for Knight. 
+ *  
+ * @author Patrick Barry
+ * @author Philip Murray
  */
 public class Vector {
 	public int x;
@@ -23,14 +24,12 @@ public class Vector {
 	}
 	
 	/**
-	 * Second constructor for vector. Creates a vector between two positions.
-	 * @param np - New position of piece
+	 * Second constructor for vector. Creates a vector from subtracting the x and y components of the first position from the second position.
+	 * @param np - Prospective new position of piece
 	 * @param p - Current position of piece
-	 * @throws IllegalArgumentException - Vector cannot be a 0 0 vector
+	 * @throws IllegalArgumentException - Vector cannot be a 0 0 vector. Such occurs when moving xn to xn. 
 	 */
-	public Vector(Position np, Position p) { //Create new vector with t= new pos and i= this.pos
-		//System.out.println(np.x +" and "+p.x);
-		//System.out.println(np.y +" and "+p.y);
+	public Vector(Position np, Position p) { 
 		this.x = np.x - p.x;
 		this.y = np.y - p.y;
 		if(this.x == 0 && this.y == 0) {
@@ -41,6 +40,7 @@ public class Vector {
 	
 	/**
 	 * First equals Method
+	 * Compares if vector has the same x and y components as this vector.
 	 * @param v - Vector to be compared with current vector.
 	 * @return true - Vector is equal. false - Vector is not equal.
 	 */
@@ -49,6 +49,7 @@ public class Vector {
 	}
 	/**
 	 * Second equals Method
+	 * Compares if vector has the same x and y components as this vector.
 	 * @param x - X component of vector which is compared to current vector.
 	 * @param y - Y component of vector which is compared to current vector.
 	 * @return true - Vector is equal. false - Vector is not equal.
@@ -59,34 +60,28 @@ public class Vector {
 	
 	/**
 	 * variationOf Method
-	 * @param x - X component of vector which is compared to current vector.
-	 * @param y - Y component of vector which is compared to current vector.
-	 * @return true - If vector is a variation of current vector. false - If vector is not a variation of current vector
-	 * @throws IllegalArguementException - If provided a zero vector.
+	 * This method is used to validate that a Piece's movement vector is a permissible movement pattern for that Piece.
+	 * Checks if the Piece's movement vector can match the pattern vector by applying a rotation, reflection or scalar transformation.
+	 * 
+	 * Use N = <1, 2>, R = <0, 1>, B = <1, 1>, Q = <0,1> || <1,1>
+	 * 
+	 * @param x - X component of pattern vector which is compared to current vector.
+	 * @param y - Y component of pattern vector which is compared to current vector.
+	 * @return true - If this vector is a variation of the given pattern vector. false - If this vector is not a variation of the pattern vector.
+	 * @throws IllegalArguementException - If provided a zero vector. Converted into IllegalMoveException upon being catched. 
 	 */
-	public boolean variationOf(int x, int y) { //checks if the vector matches the <x, y> pattern given, L = <1, 2>, R = <0, 1>, B = <1, 1>
+	public boolean variationOf(int x, int y) {
+		
 		if( (x == 0 && y == 0)) {
 			throw new IllegalArgumentException();
 		} 
-		
-		
-		// Say v = <5,0> and we do v.variationOf(<0,1>)
-		// The below if statements confirm <5,0> is a rook move by making sure <5,0> and <0,1> both have 1 zero. 
-		
 		if( x == 0 || y == 0 ) { 
-		//	System.out.println("A");
-			//<0,1> has a 0 in it
-		//	System.out.println("This x "+this.x+" and "+this.y);
 			if( this.x == 0 || this.y == 0 ) { 
-		//		System.out.println("B");
-				return true; //<0,1> and <5,0> have a 0 in it
+				return true;
 			}
-		//	System.out.println("C");
-			return false; // <0,1> has a 0 in it but <5,0> does not have a 0
-			
+			return false; 
 		} else if( this.x == 0 || this.y == 0 ) {
-		//	System.out.println("D");
-			return false; // <0,1> does not have a 0 in it, but <5,0> does have a 0. 
+			return false;
 		}
 	
 		double px2 = (double) Math.abs(x);
@@ -104,9 +99,13 @@ public class Vector {
 	
 	/**
 	 * variationOfWithLimit Method
+	 * This method applies a constraint to the variationOf method that the magnitude x and y components both be less than the provided limit. 
+	 * 
+	 * Use limit = 2 for Knight and limit = 1 for 
+	 * 
 	 * @param x - X component of vector which is compared to current vector.
 	 * @param y - Y component of vector which is compared to current vector.
-	 * @param limit - Maximum value x and y can be.
+	 * @param limit - Maximum value this Vector's x and y components can be.
 	 * @return true - If vector is a variation of current vector and passes size limit test. false - If vector is not a variation of current vector or does not pass size limit test.
 	 */
 	public boolean variationOfWithLimit(int x, int y, double limit) {
@@ -114,7 +113,6 @@ public class Vector {
 			return false;
 		} 
 		if(Math.abs(this.x) > limit || Math.abs(this.y) > limit) {
-		//	System.out.println("This x "+this.x+" and "+this.y);
 			return false;
 		}
 		return true;
@@ -123,9 +121,13 @@ public class Vector {
 	
 	/**
 	 * UnitStepVector Method
+	 * Returns a vector that can take single step increments to traverse the direction of the this-vector.
+	 * Scales non-zero x and y Vector components to have a magnitude of 1. 
+	 * Only suitable for linear Piece movement vectors.
+	 * 
 	 * @return Vector - Scaled down version of the current vector into unit steps.
 	 */
-	public Vector UnitStepVector() { // Converts <4, -4> to <1, -1>
+	public Vector UnitStepVector() { 
 		if(this.x == 0) {
 			return new Vector(0, (int) Math.abs(this.y)/this.y);
 		}

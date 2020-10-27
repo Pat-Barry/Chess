@@ -6,11 +6,13 @@ import geometry.Position;
 import geometry.Vector;
 
 /**
- * Queen Object
+ * Queen Class
+ * 
+ * A <code>Queen</code> is the representation of a queen chess piece, implementing the abstract methods declared in Piece.
  *  
- *  A <code>Queen</code> object contains the parameters and functionality
- *  for the Queen piece
- *  @author PatrickBarry
+ * @author Patrick Barry
+ * @author Philip Murray
+ *
  */
 
 public class Queen extends Piece{
@@ -18,15 +20,16 @@ public class Queen extends Piece{
 	
 	/**
 	 * Constructor for the Queen class
-	 * @param i - Player turn
+	 * @param s - side (0: white, 1: black) of the Queen
 	 */
-	public Queen(int i) {
-		super(i);
-		this.side = i;
+	public Queen(int s) {
+		super(s);
 	}
 
 	/**
 	 * getString Method
+	 * Returns ASCII representation of the Queen
+	 * Used in Board.render method
 	 * @return bQ - If black Queen. wQ - If white Queen.
 	 */
 	@Override
@@ -40,11 +43,17 @@ public class Queen extends Piece{
 	
 	/**
 	 * moveTo Method
-	 * @param newpos - New position
-	 * @param promotion - Promoted piece
-	 * @throws IllegalMoveException - Can't Friendly Fire
-	 * @throws IllegalMoveException - Collision Detected in Queen movement
-	 * @throws IllegalMoveException - Move Vector not allowed
+	 * This is the Queen's implementation of the moveTo method. 
+	 * Performs various legality checks on requested movement. 
+	 * If a check fails, an IllegalMoveException is thrown corresponding to the failed check.
+	 * Move is applied on this Piece's ParentBoard.
+	 * 
+	 *  
+	 * @param newpos - Position the Piece is moving to
+	 * @param promotion - Not used in Queen's implementation
+	 * @throws IllegalMoveException - Cannot capture same-side Piece
+	 * @throws IllegalMoveException - Cannot move through a Piece
+	 * @throws IllegalMoveException - Move Vector does not match any of the allowed movement vectors for this Piece
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
@@ -52,7 +61,7 @@ public class Queen extends Piece{
 		if(v.variationOf(-1, 1) || v.variationOf(0, 1)) {
 			if (this.ParentBoard.noCollisions(pos, newpos)) {
 				if (friendAt(newpos)) {
-					throw new IllegalMoveException("Can't Friendly Fire");
+					throw new IllegalMoveException("Cannot capture same-side Piece");
 				}
 				
 				else {
@@ -61,11 +70,11 @@ public class Queen extends Piece{
 				}
 			}
 			else {
-				throw new IllegalMoveException("Collision Detected in Queen movement");
+				throw new IllegalMoveException("Cannot move through a Piece");
 			}
 		}
 		else {
-			throw new IllegalMoveException("Move Vector not allowed");
+			throw new IllegalMoveException("Move Vector does not match any of the allowed movement vectors for this Piece");
 		}
 		
 	}

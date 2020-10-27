@@ -7,21 +7,26 @@ import geometry.Position;
 import geometry.Vector;
 
 /**
- * King Object
+ * King Class
+ * 
+ * A <code>King</code> is the representation of a king chess piece, implementing the abstract methods declared in Piece.
  *  
- *  A <code>King</code> object contains the parameters and functionality
- *  for the King piece
+ * @author Patrick Barry
+ * @author Philip Murray
  *
  */
 
 public class King extends Piece {
 
+	/** Stores whether a King has moved */
 	boolean hasMoved = false;
+	
+	/** File a King starts out on. 0 or 7 (corresponding to File 1 or File 8), which is the yth index the King starts out on. */
 	int castleBar;
 	
 	/**
 	 * Constructor for the King class
-	 * @param s - Player turn
+	 * @param s - side (0: white, 1: black) of the Queen
 	 */
 	public King(int s) {
 		super(s);
@@ -34,7 +39,9 @@ public class King extends Piece {
 	
 	/**
 	 * getString Method
-	 * @return bK - If black King. wK - If white King.
+	 * Returns ASCII representation of the King. 
+	 * Used in Board.render method
+	 * @return bK - If black King. wK - If white King
 	 */
 	@Override
 	public String getString() {
@@ -47,62 +54,62 @@ public class King extends Piece {
 
 	/**
 	 * moveTo Method
-	 * @param newpos - New position
-	 * @param promotion - Promoted Piece
-	 * @throws IllegalMoveException - For castling, king cannot be, move through, or end up, under attack
-	 * @throws IllegalMoveException - Cannot be any pieces between King/Rook to do castle
-	 * @throws IllegalMoveException - Rook must (1) not have moved and (2) be on same team
-	 * @throws IllegalMoveException - Cannot castle with non-rook piece
-	 * @throws IllegalMoveException - Cannot move King to same-team piece
-	 * @throws IllegalMoveException - Move Vector not allowed
+	 * This is the King's implementation of the moveTo method. 
+	 * Performs various legality checks on requested movement. 
+	 * If a check fails, an IllegalMoveException is thrown corresponding to the failed check.
+	 * Move is applied on this Piece's ParentBoard.
+	 * 
+	 *  
+	 * @param newpos - Position the King is moving to
+	 * @param promotion - Not used in King's implementation
+	 * @throws IllegalMoveException - For castling: King cannot start at, move through, or end up at a position that can be attacked
+	 * @throws IllegalMoveException - For castling: There cannot be a Piece between the King/Rook
+	 * @throws IllegalMoveException - For castling: Rook must (1) not have moved and (2) be on same team
+	 * @throws IllegalMoveException - For castling: Cannot castle with non-Rook Piece
+	 * @throws IllegalMoveException - Cannot capture same-team Piece
+	 * @throws IllegalMoveException - Move Vector does not match any of the allowed movement vectors for this Piece
 	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
 		
-	//	System.out.println("This posx "+this.pos.x+" this posy "+this.pos.y);
 		Vector v = new Vector(newpos, this.pos);
-	//	System.out.println("King vector"+v);
 		if(!hasMoved && newpos.y == this.castleBar && (newpos.x == 0 || newpos.x == 7)) {
 			if(ParentBoard.getPiece(newpos) instanceof Rook) {
-				Rook rk = (Rook) ParentBoard.getPiece(newpos);
 				
+				Rook rk = (Rook) ParentBoard.getPiece(newpos);
 				Position step1 = pos.addVector(0, (newpos.x == 0 ? -1 : 1));
 				Position step2 = pos.addVector(0, (newpos.x == 0 ? -2 : 2));
+				
 				if(rk.side == this.side && rk.hasMoved == false) {
 					if(ParentBoard.noCollisions(pos, newpos)) {
 						if(ParentBoard.KingIsChecked(this.side) || ParentBoard.EnemyCanAttack(this.side, step1) || ParentBoard.EnemyCanAttack(this.side, step2)) {
 							
-							throw new IllegalMoveException("For castling, king cannot be, move through, or end up, under attack");
-				
+							throw new IllegalMoveException("For castling: King cannot start at, move through, or end up at a position that can be attacked");
 						} else {
 							this.hasMoved = true;
 							rk.hasMoved = true;
-							
 							ParentBoard.setPiece(newpos, this);
 							ParentBoard.setPiece(pos, rk);
 						}
 					} else {
-						throw new IllegalMoveException("Cannot be any pieces between King/Rook to do castle");
+						throw new IllegalMoveException("For castling: There cannot be a Piece between the King/Rook");
 					}
 				} else {
-					throw new IllegalMoveException("Rook must (1) not have moved and (2) be on same team");
+					throw new IllegalMoveException("For castling: Rook must (1) not have moved and (2) be on same team");
 				}
 			} else {
-				throw new IllegalMoveException("Cannot castle with non-rook piece");
+				throw new IllegalMoveException("For castling: Cannot castle with non-Rook Piece");
 			}
 			
 		} else if(v.variationOfWithLimit(0, 1, 1) || v.variationOfWithLimit(1, 1, 1)) {
-			//System.out.println("Vector bk "+v.x+ " and "+v.y);
-			//System.out.println("BK being asked to move to "+newpos.x +" and "+newpos.y);
-			//System.out.println("Variation of passed, "+this.side);
 			if(this.friendAt(newpos)) {
-				throw new IllegalMoveException("Cannot move King to same-team piece");
+				throw new IllegalMoveException("Cannot capture same-side Piece");
 			}
 			this.hasMoved = true;
 			ParentBoard.setPiece(newpos, this);
 			ParentBoard.setPiece(pos, null);
 		} else {
-			throw new IllegalMoveException("Move Vector not allowed");
+			throw new IllegalMoveException("Move Vector does not match any of the allowed movement vectors for this Piece");
 		}
 	}
 
