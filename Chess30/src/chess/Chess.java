@@ -7,6 +7,11 @@ import pieces.Knight;
 import pieces.Queen;
 import pieces.Rook;
 
+/**
+ * @author PatrickBarry
+ * Chess Class which contains driver for chess match and input methods
+ *
+ */
 public class Chess {
 	
 	static int turn = 0;
@@ -17,6 +22,10 @@ public class Chess {
 	public static Board CurrentBoard;
 	public static Board DeepCopy;
 	
+	/**
+	 * Main Method for generating board and runnning chess match.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		CurrentBoard = new Board();
 		CurrentBoard.render();
@@ -72,6 +81,11 @@ public class Chess {
 
 	}
 	
+	/**
+	 * charToInt Method which takes in a char and converts char to a position x on the board
+	 * @param c - Character input
+	 * @return i - X position on board for legal move. -1 for Illegal move.
+	 */
 	public static int charToInt(char c) {
 		char[] charArray = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 		for (int i = 0; i < charArray.length; i++) {
@@ -82,6 +96,14 @@ public class Chess {
 		return -1;
 	}
 	
+	/**
+	 * askForInput Method which takes in user input for moving pieces with or without promotion, requesting a draw, declaring a draw, and resigning
+	 * @throws IllegalMoveException - Requesting draw when is none
+	 * @throws IllegalMoveException - Start spot is null
+	 * @throws IllegalMoveException - Start side is not equal to turn
+	 * @throws IllegalMoveException - Cannot request promotion if black isn't moving to x1
+	 * @throws IllegalMoveException - Cannot request promotion if white isn't moving to x8
+	 */
 	public static void askForInput() throws IllegalMoveException {
 
 		clearInput();
@@ -102,7 +124,7 @@ public class Chess {
 				return;
 			}
 			
-			throw new IllegalMoveException("requesting draw when is none");
+			throw new IllegalMoveException("Requesting draw when is none");
 		}
 		if (s.length() == 6) { // Resign
 			if (turn == 0) {
@@ -117,11 +139,11 @@ public class Chess {
 		Input.start_i = Integer.parseInt( Character.toString(s.charAt(1)) ) - 1;
 		
 		if (CurrentBoard.layout[Input.start_i][Input.start_j] == null) {
-			throw new IllegalMoveException("start spot is null");
+			throw new IllegalMoveException("Start spot is null");
 		}
 		
 		if (CurrentBoard.layout[Input.start_i][Input.start_j].side != turn) {
-			throw new IllegalMoveException("start side is not equal to turn");
+			throw new IllegalMoveException("Start side is not equal to turn");
 		}
 		
 		Input.end_j = charToInt(s.charAt(3));
@@ -150,6 +172,11 @@ public class Chess {
 		
 	}
 	
+	/**
+	 * charToPiece Method which takes in a char parameter to create a piece for promotion.
+	 * @param s - char input for new promoted piece.
+	 * @return new Piece depending on char input.
+	 */
 	public static Piece charToPiece(char s) {
 		if (s == 'N') {
 			return new Knight(turn);
@@ -163,6 +190,9 @@ public class Chess {
 		return new Queen(turn);
 	}
 	
+	/**
+	 *  clearInput Method which sets starting position, ending positions, and promotion to 0 and null respectively.
+	 */
 	public static void clearInput() {
 		Input.start_i = -1;
 		Input.start_j = -1;
@@ -171,6 +201,10 @@ public class Chess {
 		Input.promotion = null;
 	}
 	
+	/**
+	 * Input class for chess. Declares a start i,j position, an end i,j position, and a promotion piece.
+	 * 
+	 */
 	static class Input {
 		static int start_i;
 		static int start_j;
