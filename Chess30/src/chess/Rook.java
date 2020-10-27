@@ -37,8 +37,8 @@ public class Rook extends Piece {
 	 * moveTo Method
 	 * @param newpos - New position
 	 * @param promotion - Promoted piece
-	 * @throws IllegalMoveException - If new position has a friendly piece
-	 * @throws IllegalMoveException - If collision detected during Rook movement
+	 * @throws IllegalMoveException - Can't Friendly Fire
+	 * @throws IllegalMoveException - Collision Detected in Rook movement
 	 * @throws IllegalMoveException - If new position is not a legal move for Rook
 	 */
 	@Override
@@ -61,7 +61,7 @@ public class Rook extends Piece {
 			}
 		}
 		else {
-			throw new IllegalMoveException("Vector is not in step shape");
+			throw new IllegalMoveException("Move Vector not allowed");
 		}
 	}
 	

@@ -32,7 +32,7 @@ public class Pawn extends Piece {
 	
 	/**
 	 * getString Method
-	 * @return bP - If black Pawn.
+	 * @return bP - If black Pawn. wP - If white Pawn.
 	 */
 	@Override
 	public String getString() {
@@ -43,7 +43,16 @@ public class Pawn extends Piece {
 		}
 	}
 
-	
+	/**
+	 * moveTo Method
+	 * @param newpos - New position
+	 * @param promotion - Promoted piece
+	 * @throws IllegalMoveException - Forward collison in pawn movement
+	 * @throws IllegalMoveException - Diagonal Collision requires capture
+	 * @throws IllegalMoveException - Can only go 2 steps on first pawn move
+	 * @throws IllegalMoveException - Cannot pass 2, there is a piece 2 steps ahead
+	 * @throws IllegalMoveException - Move vector does not match a legal move
+	 */
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
 		
@@ -61,7 +70,7 @@ public class Pawn extends Piece {
 		if(v.equals(0, moveDirectionDelta)) {
 	//	System.out.println("Vector is a match for 01");
 			if(this.collisionAt(newpos) ) {
-				throw new IllegalMoveException("Cannot move pawn ahead, there is a collision");
+				throw new IllegalMoveException("Forward collison in pawn movement");
 			}
 		//	System.out.println("Passed if else 01");
 			
@@ -74,7 +83,7 @@ public class Pawn extends Piece {
 				} else {
 					Pawn pwn = (Pawn) ParentBoard.getPiece(newpos.addVector(0, -moveDirectionDelta));
 					System.out.println(ParentBoard.gameItteration+" "+pwn.passantItteration);
-					throw new IllegalMoveException("Trying to move pawn diagonal where there is no piece, or passant pass");
+					throw new IllegalMoveException("Diagonal Collision requires capture");
 				}
 			} 
 			

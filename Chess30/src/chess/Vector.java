@@ -1,8 +1,22 @@
 package chess;
 
+/**
+ * Vector Object
+ *  
+ *  A <code>Vector</code> object contains the parameters and functionality
+ *  for the Vector object
+ * @author PatrickBarry
+ *
+ */
 public class Vector {
 	int x;
 	int y;
+	
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public Vector(int x, int y){
 		this.x = x;
 		this.y = y;
