@@ -74,13 +74,13 @@ public class King extends Piece {
 			if(ParentBoard.getPiece(newpos) instanceof Rook) {
 				
 				Rook rk = (Rook) ParentBoard.getPiece(newpos);
-				Position step1 = pos.addVector(0, (newpos.x == 0 ? -1 : 1));
-				Position step2 = pos.addVector(0, (newpos.x == 0 ? -2 : 2));
+				Position step1 = pos.addVector((newpos.x == 0 ? -1 : 1), 0);
+				Position step2 = pos.addVector((newpos.x == 0 ? -2 : 2), 0);
 				
 				if(rk.side == this.side && rk.hasMoved == false) {
 					if(ParentBoard.noCollisions(pos, newpos)) {
 						if(ParentBoard.KingIsChecked(this.side) || ParentBoard.EnemyCanAttack(this.side, step1) || ParentBoard.EnemyCanAttack(this.side, step2)) {
-							
+						
 							throw new IllegalMoveException("For castling: King cannot start at, move through, or end up at a position that can be attacked");
 						} else {
 							this.hasMoved = true;
