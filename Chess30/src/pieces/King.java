@@ -66,27 +66,43 @@ public class King extends Piece {
 	 * @throws IllegalMoveException  Cannot capture same-team Piece
 	 * @throws IllegalMoveException  Move Vector does not match any of the allowed movement vectors for this Piece
 	 */
+	
 	@Override
 	public void moveTo(Position newpos, Piece promotion) throws IllegalMoveException {
 		
 		Vector v = new Vector(newpos, this.pos);
-		if(!hasMoved && newpos.y == this.castleBar && (newpos.x == 0 || newpos.x == 7)) {
-			if(ParentBoard.getPiece(newpos) instanceof Rook) {
+		
+		if(!hasMoved && 	( (v.equals(-2,0) && newpos.equals(2, this.castleBar)) || (v.equals(2,0) && newpos.equals(6, this.castleBar)) )) {
+			Position rookPos;
+			Position step1;
+			Position step2;
+			Position newRookPos;
+			if(v.equals(2,0)) {
+				rookPos = new Position( 7, castleBar);
+				step1 = pos.addVector(1, 0);
+				step2 = pos.addVector(2, 0);
+				newRookPos = this.pos.addVector(1, 0);
+			} else {
+				rookPos = new Position( 0, castleBar);
+				step1 = pos.addVector(-1, 0);
+				step2 = pos.addVector(-2, 0);
+				newRookPos = this.pos.addVector(-1, 0);
+			}
+			if(ParentBoard.getPiece(rookPos) instanceof Rook) {
 				
-				Rook rk = (Rook) ParentBoard.getPiece(newpos);
-				Position step1 = pos.addVector((newpos.x == 0 ? -1 : 1), 0);
-				Position step2 = pos.addVector((newpos.x == 0 ? -2 : 2), 0);
-				
+				Rook rk = (Rook) ParentBoard.getPiece(rookPos);
+
 				if(rk.side == this.side && rk.hasMoved == false) {
-					if(ParentBoard.noCollisions(pos, newpos)) {
+					if(ParentBoard.noCollisions(pos, rookPos)) {
 						if(ParentBoard.KingIsChecked(this.side) || ParentBoard.EnemyCanAttack(this.side, step1) || ParentBoard.EnemyCanAttack(this.side, step2)) {
-						
 							throw new IllegalMoveException("For castling: King cannot start at, move through, or end up at a position that can be attacked");
 						} else {
 							this.hasMoved = true;
 							rk.hasMoved = true;
 							ParentBoard.setPiece(newpos, this);
-							ParentBoard.setPiece(pos, rk);
+							ParentBoard.setPiece(newRookPos, rk);
+							ParentBoard.setPiece(this.pos, null);
+							ParentBoard.setPiece(rookPos, null);
 						}
 					} else {
 						throw new IllegalMoveException("For castling: There cannot be a Piece between the King/Rook");
